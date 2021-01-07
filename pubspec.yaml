@@ -27,8 +27,12 @@ dependencies:
   ionicons: ^0.0.3
   meta: ^1.2.4
   provider: ^4.3.2+3
+  retrofit: any
+  logger: any
 
 dev_dependencies:
+  retrofit_generator: any
+  build_runner: any
   flutter_test:
     sdk: flutter
 
