@@ -2,7 +2,7 @@
 
 Application for store information about heroes for role play
 
-## Requiments
+## Requirements
 
 - Flutter 1.26
 - Dart 2.12
