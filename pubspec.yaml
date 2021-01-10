@@ -29,6 +29,7 @@ dependencies:
   provider: ^4.3.2+3
   retrofit: any
   logger: any
+  flutter_secure_storage: ^3.3.5
 
 dev_dependencies:
   retrofit_generator: any
