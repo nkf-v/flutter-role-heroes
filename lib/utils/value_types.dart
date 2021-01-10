@@ -2,12 +2,22 @@ abstract class IValueType {
   convertValue(String value);
 }
 
-abstract class BaseValueType implements IValueType {
-  String nameType;
+abstract class ValueTypeFactory implements IValueType {
+
+  static final Map<String, IValueType> _cacheForFactory = <String, IValueType>{
+    IntType.nameType: IntType(),
+    StringType.nameType: StringType(),
+    BooleanType.nameType: BooleanType(),
+    DoubleType.nameType: DoubleType(),
+  };
+
+  factory ValueTypeFactory(String nameType) {
+    return _cacheForFactory[nameType];
+  }
 }
 
-class IntType extends BaseValueType {
-  String nameType = 'int';
+class IntType extends IValueType {
+  static String nameType = 'int';
 
   @override
   int convertValue(String value) {
@@ -15,8 +25,8 @@ class IntType extends BaseValueType {
   }
 }
 
-class StringType extends BaseValueType {
-  String nameType = 'string';
+class StringType extends IValueType {
+  static String nameType = 'string';
 
   @override
   String convertValue(String value) {
@@ -24,8 +34,8 @@ class StringType extends BaseValueType {
   }
 }
 
-class BooleanType extends BaseValueType {
-  String nameType = 'bool';
+class BooleanType extends IValueType {
+  static String nameType = 'bool';
 
   @override
   bool convertValue(String value) {
@@ -36,8 +46,8 @@ class BooleanType extends BaseValueType {
   }
 }
 
-class DoubleType extends BaseValueType {
-  String nameType = 'double';
+class DoubleType extends IValueType {
+  static String nameType = 'double';
 
   @override
   double convertValue(String value) {

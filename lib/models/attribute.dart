@@ -7,7 +7,7 @@ class Attribute {
   int id;
   String name;
 
-  BaseValueType type;
+  IValueType type;
   String _value;
   Category category;
 
