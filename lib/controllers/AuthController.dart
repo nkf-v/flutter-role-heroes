@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 
 abstract class IAuthController {
   Future<dynamic> login(String login, String password);
-  Future<void> register();
+  Future<dynamic> register(String login, String password, String passwordConfirmation);
   Future<void> logout();
 }
 
@@ -30,13 +30,20 @@ class AuthController extends BaseController implements IAuthController {
   }
 
   @override
-  Future<void> logout() {
-    
+  Future<dynamic> register(String login, String password, String passwordConfirmation) async {
+    var result;
+    try {
+      result = _saveAccessToken(await _apiClient.register({'login': login, 'password': password, 'password_confirmation': passwordConfirmation}));
+    }
+    catch (dioError) {
+      result = _exceptionHandle(dioError);
+    }
+    return result;
   }
 
   @override
-  Future<void> register() {
-    
+  Future<void> logout() {
+    // TODO: realize logout
   }
 
   bool _saveAccessToken(response) {
