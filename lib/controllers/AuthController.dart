@@ -20,18 +20,11 @@ class AuthController extends BaseController implements IAuthController {
     var result;
     try
     {
-      Map<String, dynamic> response = await _apiClient.login({'login': login, 'password': password});
-      _accessTokenStorage.setValue(response['access_token']);
-      result = true;
+      result = _saveAccessToken(await _apiClient.login({'login': login, 'password': password}));
     }
     catch (dioError)
     {
-      switch (dioError.runtimeType) {
-        case DioError:
-          result = GetErrorMessage.fromApiResponse((dioError as DioError).response.data);
-          break;
-        default:
-      }
+      result = _exceptionHandle(dioError);
     }
     return result;
   }
@@ -44,5 +37,25 @@ class AuthController extends BaseController implements IAuthController {
   @override
   Future<void> register() {
     
+  }
+
+  bool _saveAccessToken(response) {
+    bool isSave = false;
+    if (response['access_token'] != null) {
+      _accessTokenStorage.setValue(response['access_token']);
+      isSave = true;
+    }
+    return isSave;
+  }
+
+  dynamic _exceptionHandle(exception) {
+    var result;
+    switch (exception.runtimeType) {
+      case DioError:
+        result =  GetErrorMessage.fromApiResponse((exception as DioError).response.data);
+        break;
+      default:
+    }
+    return result;
   }
 }
