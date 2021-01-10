@@ -14,13 +14,13 @@ class LoginScreen extends StatelessWidget {
   static final routeName = '/';
 
   final _formKey = GlobalKey<FormState>();
-  final LoginFormValues formValues = LoginFormValues();
+  final LoginFormValues _formValues = LoginFormValues();
   // TODO Change method get controller
   final AuthController controller = AuthController();
 
   void login(BuildContext context) async {
     MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
-    var result = await controller.login(formValues.login, formValues.password);
+    var result = await controller.login(_formValues.login, _formValues.password);
     processFlushbar.dismiss();
 
     if (result is bool && result) {
@@ -37,13 +37,6 @@ class LoginScreen extends StatelessWidget {
         statusColor: Colors.red,
         duration: Duration(seconds: 2),
       ).show(context);
-    }
-  }
-
-  void submitLoginForm(BuildContext context) async {
-    _formKey.currentState.save();
-    if (_formKey.currentState.validate()) {
-      login(context);
     }
   }
 
@@ -77,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                           result = 'Login length is less 3 characters';
                         return result;
                       },
-                      onSaved: (String value) => formValues.login = value,
+                      onSaved: (String value) => _formValues.login = value,
                       decoration: InputDecoration(
                         labelText: 'Login',
                         hintText: 'Enter login',
@@ -98,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                           result = 'Password length is less 6 characters';
                         return result;
                       },
-                      onSaved: (String value) => formValues.password = value,
+                      onSaved: (String value) => _formValues.password = value,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         hintText: 'Enter password',
@@ -112,7 +105,11 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
-                          onPressed: () => submitLoginForm(context),
+                          onPressed: () {
+                            _formKey.currentState.save();
+                            if (_formKey.currentState.validate())
+                              login(context);
+                          },
                           child: Text('Log in'),
                         ),
                         RaisedButton(
