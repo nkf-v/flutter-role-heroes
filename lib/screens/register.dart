@@ -109,7 +109,7 @@ class RegisterScreen extends StatelessWidget {
                         child: Text('Register'),
                       ),
                       RaisedButton(
-                        onPressed: () => Navigator.of(context).pushNamed(LoginScreen.routeName),
+                        onPressed: () => Navigator.of(context).pop(),
                         child: Text('Log in'),
                       ),
                     ]
