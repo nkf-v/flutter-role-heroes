@@ -5,7 +5,7 @@ abstract class BaseSecureStorage {
   final FlutterSecureStorage storage = GetIt.instance<FlutterSecureStorage>();
   String key;
 
-  getValue() async {
+  Future<String> getValue() async {
     return await storage.read(key: key);
   }
 

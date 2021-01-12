@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/flushbar.dart';
 import 'package:role_heroes/constants.dart';
-import 'package:role_heroes/controllers/AuthController.dart';
+import 'package:role_heroes/controllers/auth.dart';
 
 import 'game_list.dart';
 

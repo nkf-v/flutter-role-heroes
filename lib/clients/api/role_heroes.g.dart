@@ -73,4 +73,22 @@ class _ApiClient implements ApiClient {
     final value = _result.data;
     return value;
   }
+
+  @override
+  Future<dynamic> refresh(accessToken) async {
+    ArgumentError.checkNotNull(accessToken, 'accessToken');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.request('auth/refresh',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{r'Authorization': accessToken},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = _result.data;
+    return value;
+  }
 }

@@ -22,4 +22,7 @@ abstract class ApiClient {
 
   @GET('auth/logout')
   Future logout(@Header('Authorization') String accessToken, @Queries() Map<String, dynamic> json);
+
+  @GET('auth/refresh')
+  Future refresh(@Header('Authorization') String accessToken);
 }

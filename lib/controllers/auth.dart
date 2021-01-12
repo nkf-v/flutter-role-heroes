@@ -1,14 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:role_heroes/clients/api/role_heroes.dart';
 import 'package:role_heroes/utils/base_controller.dart';
-import 'package:role_heroes/utils/get_message_error.dart';
 import 'package:role_heroes/utils/secure_storages.dart';
-import 'package:dio/dio.dart';
 
 abstract class IAuthController {
   Future<dynamic> login(String login, String password);
   Future<dynamic> register(String login, String password, String passwordConfirmation);
   Future<void> logout();
+  Future<bool> checkAuth();
 }
 
 class AuthController extends BaseController implements IAuthController {
@@ -18,12 +18,10 @@ class AuthController extends BaseController implements IAuthController {
   @override
   Future<dynamic> login(String login, String password) async {
     var result;
-    try
-    {
+    try {
       result = _saveAccessToken(await _apiClient.login({'login': login, 'password': password}));
     }
-    catch (dioError)
-    {
+    catch (dioError) {
       result = _exceptionHandle(dioError);
     }
     return result;
@@ -55,11 +53,31 @@ class AuthController extends BaseController implements IAuthController {
     return isSave;
   }
 
+  @override
+  Future<bool> checkAuth() async {
+    String accessToken = await _accessTokenStorage.getValue();
+    bool result = true;
+    if (accessToken != null && accessToken != '')
+      result = await _refresh(accessToken);
+    return result;
+  }
+
+  Future<bool> _refresh(String accessToken) async {
+    bool result = true;
+    try {
+      result = _saveAccessToken(await _apiClient.refresh(accessToken));
+    }
+    catch (dioError) {
+      result = _exceptionHandle(dioError);
+    }
+    return result;
+  }
+
   dynamic _exceptionHandle(exception) {
     var result;
     switch (exception.runtimeType) {
       case DioError:
-        result =  GetErrorMessage.fromApiResponse((exception as DioError).response.data);
+        result = getErrorMessage((exception as DioError).response.data);
         break;
       default:
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/flushbar.dart';
 import 'package:role_heroes/constants.dart';
-import 'package:role_heroes/controllers/AuthController.dart';
+import 'package:role_heroes/controllers/auth.dart';
 import 'package:role_heroes/screens/game_list.dart';
 import 'package:role_heroes/screens/register.dart';
 
@@ -10,9 +10,16 @@ class LoginFormValues {
   String password;
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static final routeName = '/';
 
+  @override
+  State<StatefulWidget> createState() {
+    return _LoginScreen();
+  }
+}
+
+class _LoginScreen extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final LoginFormValues _formValues = LoginFormValues();
   // TODO Change method get controller
@@ -42,6 +49,9 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO check auth on splash screen
+    controller.checkAuth().then((isAuth) { if (isAuth) Navigator.of(context).pushReplacementNamed(GameScreen.routeName); });
+
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(gDefaultPadding),
