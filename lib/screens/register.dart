@@ -28,9 +28,8 @@ class RegisterScreen extends StatelessWidget {
       MainFlushbar(
         message: 'Register success',
         statusColor: Colors.green,
-        duration: Duration(seconds: 2),
-      ).show(context);
-      Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
+        duration: Duration(seconds: 1),
+      )..show(context).whenComplete(() => Navigator.of(context).pushReplacementNamed(GameScreen.routeName));
     }
     else {
       MainFlushbar(
