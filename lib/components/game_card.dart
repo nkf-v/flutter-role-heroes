@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/models/game/game.dart';
+import 'package:role_heroes/screens/hero_list.dart';
 
 class GameCard extends StatelessWidget {
   Game game;
@@ -28,7 +29,7 @@ class GameCard extends StatelessWidget {
     return Card(
       key: ValueKey(game.id),
       child: InkWell(
-        onTap: () { print('ink'); },
+        onTap: () { Navigator.of(context).pushNamed(HeroListScreen.routeName, arguments: {'gameId': game.id}); },
         child: Padding(
           padding: const EdgeInsets.only(top: gDefaultPadding, left: gDefaultPadding, right: gDefaultPadding, bottom: gDefaultPadding / 2),
           child: Column(
@@ -56,5 +57,4 @@ class GameCard extends StatelessWidget {
       ),
     );
   }
-
 }
