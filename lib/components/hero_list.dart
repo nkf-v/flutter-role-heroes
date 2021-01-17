@@ -24,8 +24,7 @@ class _HeroListState extends State<HeroList> {
     return FutureBuilder(
       future: widget.controller.userHeroes(widget.gameId),
       builder: (BuildContext context, AsyncSnapshot<List<UserHero>> snapshot) {
-        Widget result = Container(
-          alignment: Alignment.center,
+        Widget result = Center(
           child: PreLoader(),
         );
 
@@ -56,7 +55,7 @@ class _HeroListState extends State<HeroList> {
           );
         }
         else if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
+          return Center(child: Text(snapshot.error.toString()));
         }
 
         return result;
