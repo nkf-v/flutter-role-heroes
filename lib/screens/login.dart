@@ -13,7 +13,7 @@ class LoginFormValues {
 class LoginScreen extends StatefulWidget {
   static final routeName = '/';
 
-  // TODO Change method get controller
+  // TODO replace get controller realize
   final IAuthController controller = AuthController();
 
   @override

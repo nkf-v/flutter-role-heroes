@@ -7,6 +7,7 @@ import 'package:role_heroes/controllers/game.dart';
 import 'package:role_heroes/models/game/game.dart';
 
 class GameList extends StatefulWidget {
+  // TODO replace get controller realize
   final IGameController controller = GameController();
 
   @override

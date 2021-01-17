@@ -16,7 +16,7 @@ class RegisterScreen extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegisterFormValues _formValues = RegisterFormValues();
-  // TODO Change method get controller
+  // TODO replace get controller realize
   final IAuthController controller = AuthController();
 
   void register(BuildContext context) async {
