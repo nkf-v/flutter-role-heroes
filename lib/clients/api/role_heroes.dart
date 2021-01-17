@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 import 'package:role_heroes/models/game/game.dart';
+import 'package:role_heroes/models/user_hero/user_hero.dart';
+
 part 'role_heroes.g.dart';
 
 // TODO: get baseUrl from env
@@ -28,4 +30,7 @@ abstract class ApiClient {
 
   @GET('games')
   Future<List<Game>> games(@Header('Authorization') String accessToken);
+
+  @GET('games/{gameId}/heroes')
+  Future<List<UserHero>> userHeroes(@Header('Authorization') String accessToken, @Path('gameId') int gameId);
 }
