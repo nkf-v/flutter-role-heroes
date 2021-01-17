@@ -3,7 +3,7 @@ abstract class IValueType {
   String getNameType();
 }
 
-abstract class ValueTypeFactory implements IValueType {
+abstract class ValueTypeFactory {
 
   static final Map<String, IValueType> _cacheForFactory = <String, IValueType>{
     IntType.nameType: IntType(),
@@ -12,7 +12,7 @@ abstract class ValueTypeFactory implements IValueType {
     DoubleType.nameType: DoubleType(),
   };
 
-  factory ValueTypeFactory.getTypeBuName(String nameType) {
+  static getTypeBuName(String nameType) {
     return _cacheForFactory[nameType];
   }
 }

@@ -132,4 +132,23 @@ class _ApiClient implements ApiClient {
         .toList();
     return value;
   }
+
+  @override
+  Future<UserHero> userHero(accessToken, heroId) async {
+    ArgumentError.checkNotNull(accessToken, 'accessToken');
+    ArgumentError.checkNotNull(heroId, 'heroId');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.request<Map<String, dynamic>>('heroes/$heroId',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{r'Authorization': accessToken},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = UserHero.fromJson(_result.data);
+    return value;
+  }
 }

@@ -15,4 +15,11 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType == Category)
+      return id == (other as Category).id;
+    return super == other;
+  }
 }

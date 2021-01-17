@@ -11,6 +11,8 @@ abstract class IHeroDetailScreenBuilder {
   void buildMainFieldsCategory(UserHero hero);
   void buildCharacteristicsCategory(UserHero hero);
   void buildCategories(UserHero hero);
+  List<CategoryTab> getCategories();
+  List<Widget> getViews();
 }
 
 class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
@@ -77,10 +79,12 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     });
   }
 
+  @override
   List<CategoryTab> getCategories() {
     return _categories;
   }
 
+  @override
   List<Widget> getViews() {
     return _views;
   }

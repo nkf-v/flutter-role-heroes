@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/preloader.dart';
-import 'package:role_heroes/mockups/mockups.dart';
+import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/user_hero/user_hero.dart';
 import 'package:role_heroes/utils/builders/hero_detail_screen_builder.dart';
 import 'package:role_heroes/widgets/app_bar_hero_detail.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
 class HeroDetailScreen extends StatefulWidget {
-  static const routeName = '/heroDetail';
+  static String routeName = '/hero';
+  // TODO replace get controller realize
+  IUserHeroController controller = UserHeroController();
 
   @override
   State<StatefulWidget> createState() {
@@ -16,20 +18,23 @@ class HeroDetailScreen extends StatefulWidget {
 }
 
 class _HeroDetailScreenState extends State<HeroDetailScreen> {
-  HeroDetailScreenBuilder screenBuilder;
+  int heroId;
+  IHeroDetailScreenBuilder screenBuilder;
 
-  _HeroDetailScreenState({this.screenBuilder});
+  _HeroDetailScreenState({@required this.screenBuilder});
 
   @override
   Widget build(BuildContext context) {
+    heroId = (ModalRoute.of(context).settings.arguments as Map<String, dynamic>)['heroId'] as int;
     return FutureBuilder(
-      future: getUserHero(),
+      future: widget.controller.userHero(heroId),
       builder: (context, AsyncSnapshot<UserHero> snapshot) {
         Widget result = Scaffold(
           body: Center(
             child: PreLoader(),
           ),
         );
+
         if (snapshot.hasData) {
           UserHero hero = snapshot.data;
 
@@ -50,19 +55,16 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
             ),
           );
         }
+        else if (snapshot.hasError) {
+          result = Scaffold(
+            body: Center(
+              child: Text(snapshot.error.toString()),
+            ),
+          );
+        }
 
         return result;
       },
     );
   }
-
-  Future<UserHero> getUserHero() async {
-    // TODO get hero by api client
-    await Future.delayed(Duration(seconds: 2));
-    return Mockups.hero;
-  }
-}
-
-class HeroDetailScreenArguments {
-  int heroId;
 }

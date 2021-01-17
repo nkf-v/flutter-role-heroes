@@ -10,7 +10,7 @@ class AppBarHeroDetail extends AppBar {
   }) : super(
       backgroundColor: Colors.white,
       elevation: 0,
-      bottom: TabBar(tabs: tabs),
+      bottom: TabBar(tabs: tabs, isScrollable: true),
       title: Text(title, style: TextStyle(color: gTextColor),),
   );
 }

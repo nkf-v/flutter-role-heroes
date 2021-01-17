@@ -33,4 +33,7 @@ abstract class ApiClient {
 
   @GET('games/{gameId}/heroes')
   Future<List<UserHero>> userHeroes(@Header('Authorization') String accessToken, @Path('gameId') int gameId);
+
+  @GET('heroes/{heroId}')
+  Future<UserHero> userHero(@Header('Authorization') String accessToken, @Path('heroId') int heroId);
 }

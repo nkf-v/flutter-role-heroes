@@ -3,6 +3,7 @@ import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/user_hero/user_hero.dart';
+import 'package:role_heroes/screens/hero_detail.dart';
 
 class HeroList extends StatefulWidget {
   final int gameId;
@@ -37,6 +38,7 @@ class _HeroListState extends State<HeroList> {
                 UserHero userHero = snapshot.data.elementAt(index);
                 return InkWell(
                   key: ValueKey(userHero.id),
+                  onTap: () { Navigator.of(context).pushNamed(HeroDetailScreen.routeName, arguments: <String, dynamic>{'heroId': userHero.id}); },
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(gDefaultPadding / 2),
