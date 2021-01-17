@@ -8,18 +8,15 @@ abstract class IAuthController {
   Future<dynamic> login(String login, String password);
   Future<dynamic> register(String login, String password, String passwordConfirmation);
   Future<void> logout();
-  Future<bool> checkAuth();
+  Future<dynamic> checkAuth();
 }
 
 class AuthController extends BaseController implements IAuthController {
-  final ApiClient _apiClient = GetIt.instance<ApiClient>();
-  final AccessTokenStorage _accessTokenStorage = GetIt.instance<AccessTokenStorage>();
-
   @override
   Future<dynamic> login(String login, String password) async {
     var result;
     try {
-      result = _saveAccessToken(await _apiClient.login({'login': login, 'password': password}));
+      result = _saveAccessToken(await apiClient.login({'login': login, 'password': password}));
     }
     catch (dioError) {
       result = _exceptionHandle(dioError);
@@ -31,7 +28,7 @@ class AuthController extends BaseController implements IAuthController {
   Future<dynamic> register(String login, String password, String passwordConfirmation) async {
     var result;
     try {
-      result = _saveAccessToken(await _apiClient.register({'login': login, 'password': password, 'password_confirmation': passwordConfirmation}));
+      result = _saveAccessToken(await apiClient.register({'login': login, 'password': password, 'password_confirmation': passwordConfirmation}));
     }
     catch (dioError) {
       result = _exceptionHandle(dioError);
@@ -47,7 +44,7 @@ class AuthController extends BaseController implements IAuthController {
   bool _saveAccessToken(response) {
     bool isSave = false;
     if (response['access_token'] != null) {
-      _accessTokenStorage.setValue(response['access_token']);
+      accessTokenStorage.setValue(response['access_token']);
       isSave = true;
     }
     return isSave;
@@ -55,21 +52,19 @@ class AuthController extends BaseController implements IAuthController {
 
   @override
   Future<bool> checkAuth() async {
-    String accessToken = await _accessTokenStorage.getValue();
-    bool result = true;
+    String accessToken = await accessTokenStorage.getValue();
+    bool result = false;
     if (accessToken != null && accessToken != '')
       result = await _refresh(accessToken);
     return result;
   }
 
   Future<bool> _refresh(String accessToken) async {
-    bool result = true;
+    bool result = false;
     try {
-      result = _saveAccessToken(await _apiClient.refresh(accessToken));
+      result = _saveAccessToken(await apiClient.refresh(accessToken));
     }
-    catch (dioError) {
-      result = _exceptionHandle(dioError);
-    }
+    catch (dioError) {}
     return result;
   }
 
