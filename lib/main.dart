@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/screens/game_list.dart';
 import 'package:role_heroes/screens/hero_detail.dart';
+import 'package:role_heroes/screens/hero_list.dart';
 import 'package:role_heroes/screens/login.dart';
 import 'package:role_heroes/screens/register.dart';
 import 'package:role_heroes/setup_get_it.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => LoginScreen(),
         RegisterScreen.routeName: (context) => RegisterScreen(),
         GameScreen.routeName: (context) => GameScreen(),
+        HeroListScreen.routeName: (context) => HeroListScreen(),
         HeroDetailScreen.routeName: (context) => HeroDetailScreen(),
       },
     );
