@@ -13,6 +13,9 @@ class LoginFormValues {
 class LoginScreen extends StatefulWidget {
   static final routeName = '/';
 
+  // TODO Change method get controller
+  final IAuthController controller = AuthController();
+
   @override
   State<StatefulWidget> createState() {
     return _LoginScreen();
@@ -22,12 +25,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreen extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final LoginFormValues _formValues = LoginFormValues();
-  // TODO Change method get controller
-  final AuthController controller = AuthController();
 
   void login(BuildContext context) async {
     MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
-    var result = await controller.login(_formValues.login, _formValues.password);
+    var result = await widget.controller.login(_formValues.login, _formValues.password);
     processFlushbar.dismiss();
 
     if (result is bool && result) {
@@ -49,7 +50,7 @@ class _LoginScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO check auth on splash screen
-    controller.checkAuth().then((isAuth) { if (isAuth) Navigator.of(context).pushReplacementNamed(GameScreen.routeName); });
+    widget.controller.checkAuth().then((isAuth) { if (isAuth) Navigator.of(context).pushReplacementNamed(GameScreen.routeName); });
 
     return Scaffold(
       body: Container(
