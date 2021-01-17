@@ -28,7 +28,8 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     _categories.add(
       CategoryTab(
         category: Category(
-            name: 'Base fields'
+          id: 0,
+          name: 'Base fields'
         )
       )
     );
@@ -47,7 +48,8 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     _categories.add(
         CategoryTab(
             category: Category(
-                name: 'Characteristics'
+              id: 0,
+              name: 'Characteristics',
             )
         )
     );
