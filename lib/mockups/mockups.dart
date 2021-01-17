@@ -1,7 +1,7 @@
 import 'package:role_heroes/models/attribute.dart';
-import 'package:role_heroes/models/category.dart';
-import 'package:role_heroes/models/characteristic.dart';
-import 'package:role_heroes/models/user_hero.dart';
+import 'package:role_heroes/models/category/category.dart';
+import 'package:role_heroes/models/characteristic/characteristic.dart';
+import 'package:role_heroes/models/user_hero/user_hero.dart';
 import 'package:role_heroes/utils/value_types.dart';
 
 class Mockups {

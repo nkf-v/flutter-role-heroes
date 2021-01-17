@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/mockups/mockups.dart';
-import 'package:role_heroes/models/user_hero.dart';
+import 'package:role_heroes/models/user_hero/user_hero.dart';
 import 'package:role_heroes/utils/builders/hero_detail_screen_builder.dart';
 import 'package:role_heroes/widgets/app_bar_hero_detail.dart';
 import 'package:role_heroes/widgets/category_tab.dart';

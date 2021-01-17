@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/models/characteristic.dart';
+import 'package:role_heroes/models/characteristic/characteristic.dart';
 
 import 'field.dart';
 

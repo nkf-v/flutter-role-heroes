@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:role_heroes/components/characteristics_builder.dart';
 import 'package:role_heroes/components/field.dart';
 import 'package:role_heroes/models/attribute.dart';
-import 'package:role_heroes/models/category.dart';
-import 'package:role_heroes/models/user_hero.dart';
+import 'package:role_heroes/models/category/category.dart';
+import 'package:role_heroes/models/user_hero/user_hero.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
 abstract class IHeroDetailScreenBuilder {

@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 import 'package:role_heroes/models/game/game.dart';
-import 'package:role_heroes/utils/secure_storages.dart';
 part 'role_heroes.g.dart';
 
 // TODO: get baseUrl from env
