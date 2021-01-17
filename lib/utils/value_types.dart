@@ -1,5 +1,6 @@
 abstract class IValueType {
   convertValue(String value);
+  String getNameType();
 }
 
 abstract class ValueTypeFactory implements IValueType {
@@ -11,30 +12,36 @@ abstract class ValueTypeFactory implements IValueType {
     DoubleType.nameType: DoubleType(),
   };
 
-  factory ValueTypeFactory(String nameType) {
+  factory ValueTypeFactory.getTypeBuName(String nameType) {
     return _cacheForFactory[nameType];
   }
 }
 
-class IntType extends IValueType {
+class IntType implements IValueType {
   static String nameType = 'int';
 
   @override
   int convertValue(String value) {
     return int.parse(value, radix: 10, onError: (e) => null);
   }
+
+  @override
+  String getNameType() => IntType.nameType;
 }
 
-class StringType extends IValueType {
+class StringType implements IValueType {
   static String nameType = 'string';
 
   @override
   String convertValue(String value) {
     return value;
   }
+
+  @override
+  String getNameType() => StringType.nameType;
 }
 
-class BooleanType extends IValueType {
+class BooleanType implements IValueType {
   static String nameType = 'bool';
 
   @override
@@ -44,13 +51,19 @@ class BooleanType extends IValueType {
       result = value.length > 0 ? true : false;
     return result;
   }
+
+  @override
+  String getNameType() => BooleanType.nameType;
 }
 
-class DoubleType extends IValueType {
+class DoubleType implements IValueType {
   static String nameType = 'double';
 
   @override
   double convertValue(String value) {
     return double.parse(value, (e) => null);
   }
+
+  @override
+  String getNameType() => DoubleType.nameType;
 }
