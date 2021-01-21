@@ -22,4 +22,7 @@ class Category {
       return id == (other as Category).id;
     return super == other;
   }
+
+  @override
+  int get hashCode => id;
 }
