@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:role_heroes/clients/api/role_heroes.dart';
 import 'package:role_heroes/utils/secure_storages.dart';
+import 'package:dio/dio.dart';
 
 class BaseController {
   final ApiClient apiClient = GetIt.instance<ApiClient>();
@@ -21,5 +22,16 @@ class BaseController {
 
   Future<String> getBearerToken() async {
     return 'Bearer ${await accessTokenStorage.getValue()}';
+  }
+
+  dynamic exceptionHandle(exception) {
+    var result;
+    switch (exception.runtimeType) {
+      case DioError:
+        result = getErrorMessage((exception as DioError).response.data);
+        break;
+      default:
+    }
+    return result;
   }
 }

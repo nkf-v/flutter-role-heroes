@@ -151,4 +151,25 @@ class _ApiClient implements ApiClient {
     final value = UserHero.fromJson(_result.data);
     return value;
   }
+
+  @override
+  Future<dynamic> createHero(accessToken, json) async {
+    ArgumentError.checkNotNull(accessToken, 'accessToken');
+    ArgumentError.checkNotNull(json, 'json');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(json ?? <String, dynamic>{});
+    _data.removeWhere((k, v) => v == null);
+    final _result = await _dio.request('heroes/create',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{r'Authorization': accessToken},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = _result.data;
+    return value;
+  }
 }

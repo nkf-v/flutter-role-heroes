@@ -36,4 +36,7 @@ abstract class ApiClient {
 
   @GET('heroes/{heroId}')
   Future<UserHero> userHero(@Header('Authorization') String accessToken, @Path('heroId') int heroId);
+
+  @POST('heroes/create')
+  Future createHero(@Header('Authorization') String accessToken, @Body() Map<String, dynamic> json);
 }

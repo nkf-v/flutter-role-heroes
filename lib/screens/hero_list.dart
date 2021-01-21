@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/hero_list.dart';
+import 'package:role_heroes/screens/hero_create.dart';
 import 'package:role_heroes/widgets/app_bar_default.dart';
 
 class HeroListScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class HeroListScreen extends StatelessWidget {
       appBar: DefaultAppBar(title: 'Heroes'),
       body: HeroList(gameId: gameId),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () { Navigator.of(context).pushNamed(HeroCreateScreen.routeName, arguments: {'gameId': gameId}); },
         child: Icon(Icons.add),
       ),
     );
