@@ -3,6 +3,7 @@ import 'package:role_heroes/clients/api/role_heroes.dart';
 import 'package:role_heroes/utils/secure_storages.dart';
 import 'package:dio/dio.dart';
 
+// TODO  других контроллерах много одинакового кода
 class BaseController {
   final ApiClient apiClient = GetIt.instance<ApiClient>();
   final AccessTokenStorage accessTokenStorage = GetIt.instance<AccessTokenStorage>();

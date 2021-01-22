@@ -5,6 +5,8 @@ import 'package:role_heroes/models/user_hero/user_hero.dart';
 
 part 'role_heroes.g.dart';
 
+// TODO слишком многго Header Authorization
+
 // TODO: get baseUrl from env
 @RestApi(baseUrl: 'http://dry-bastion-45736.herokuapp.com/api/')
 abstract class ApiClient {
