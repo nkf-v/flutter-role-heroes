@@ -37,7 +37,7 @@ class UserHeroController extends BaseController implements IUserHeroController {
       });
     }
     catch (dioError) {
-      result = exceptionHandle(dioError);
+      result = handleException(dioError);
     }
     return result;
   }
@@ -49,7 +49,7 @@ class UserHeroController extends BaseController implements IUserHeroController {
       result = apiClient.deleteHero(await getBearerToken(), heroId);
     }
     catch (dioError) {
-      result = exceptionHandle(dioError);
+      result = handleException(dioError);
     }
     return result;
   }

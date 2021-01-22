@@ -19,7 +19,7 @@ class AuthController extends BaseController implements IAuthController {
       result = _saveAccessToken(await apiClient.login({'login': login, 'password': password}));
     }
     catch (dioError) {
-      result = exceptionHandle(dioError);
+      result = handleException(dioError);
     }
     return result;
   }
@@ -31,7 +31,7 @@ class AuthController extends BaseController implements IAuthController {
       result = _saveAccessToken(await apiClient.register({'login': login, 'password': password, 'password_confirmation': passwordConfirmation}));
     }
     catch (dioError) {
-      result = exceptionHandle(dioError);
+      result = handleException(dioError);
     }
     return result;
   }
