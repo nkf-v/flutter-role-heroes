@@ -172,4 +172,23 @@ class _ApiClient implements ApiClient {
     final value = _result.data;
     return value;
   }
+
+  @override
+  Future<dynamic> deleteHero(accessToken, heroId) async {
+    ArgumentError.checkNotNull(accessToken, 'accessToken');
+    ArgumentError.checkNotNull(heroId, 'heroId');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.request('heroes/$heroId',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'DELETE',
+            headers: <String, dynamic>{r'Authorization': accessToken},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = _result.data;
+    return value;
+  }
 }

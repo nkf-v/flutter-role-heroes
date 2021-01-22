@@ -39,4 +39,7 @@ abstract class ApiClient {
 
   @POST('heroes/create')
   Future createHero(@Header('Authorization') String accessToken, @Body() Map<String, dynamic> json);
+
+  @DELETE('heroes/{heroId}')
+  Future deleteHero(@Header('Authorization') String accessToken, @Path('heroId') int heroId);
 }
