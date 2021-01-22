@@ -8,6 +8,7 @@ abstract class IUserHeroController {
   Future<List<Game>> gamesForCreateUserHero();
   Future<dynamic> createHero(int gameId, String name);
   Future<dynamic> deleteHero(int heroId);
+  Future<dynamic> updateHero(int heroId, Map<String, dynamic> fields);
 }
 
 class UserHeroController extends BaseController implements IUserHeroController {
@@ -51,5 +52,10 @@ class UserHeroController extends BaseController implements IUserHeroController {
       result = exceptionHandle(dioError);
     }
     return result;
+  }
+
+  @override
+  Future<dynamic> updateHero(int heroId, Map<String, dynamic> fields) {
+    return handleRequest(() async => apiClient.updateHero(await getBearerToken(), heroId, fields));
   }
 }

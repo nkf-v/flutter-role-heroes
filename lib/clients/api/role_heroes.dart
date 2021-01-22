@@ -42,4 +42,7 @@ abstract class ApiClient {
 
   @DELETE('heroes/{heroId}')
   Future deleteHero(@Header('Authorization') String accessToken, @Path('heroId') int heroId);
+
+  @PUT('heroes/{heroId}')
+  Future updateHero(@Header('Authorization') String accessToken, @Path('heroId') int heroId, @Body() Map<String, dynamic> json);
 }

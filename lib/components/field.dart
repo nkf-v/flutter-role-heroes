@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:role_heroes/components/flushbar.dart';
 
 import '../constants.dart';
 
-class Field extends StatelessWidget {
+class Field extends StatefulWidget {
   String name;
   dynamic value;
-
-  final _editValueController = TextEditingController();
+  Future Function(dynamic) setValue;
 
   Field({
     @required this.name,
     @required this.value,
+    @required this.setValue,
   });
 
-  Widget viewValue(BuildContext context) {
-    return Text(
-      value.toString(),
-      style: Theme.of(context).textTheme.bodyText1,
-    );
-  }
+  @override
+  State<StatefulWidget> createState() => _FieldState();
+}
+
+class _FieldState extends State<Field> {
+  final _editValueController = TextEditingController();
 
   Widget contentForAlert(context) {
-    _editValueController.text = value.toString();
+    _editValueController.text = widget.value.toString();
     return TextField(
       controller: _editValueController,
       keyboardType: TextInputType.text,
@@ -36,8 +37,23 @@ class Field extends StatelessWidget {
 
   void saveValue(BuildContext context) {
     String newValue = _editValueController.text;
-    if (newValue != value.toString()) {
-      value = newValue;
+    if (newValue != widget.value.toString()) {
+      MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
+      widget.setValue(newValue)
+        .then((value) {
+          processFlushbar.dismiss();
+          setState(() { widget.value = newValue; });
+          Navigator.pop(context);
+        })
+        .catchError((error) {
+          processFlushbar.dismiss();
+          MainFlushbar(
+            message: error.toString(),
+            statusColor: Colors.red,
+            duration: Duration(seconds: 4)
+          )..show(context);
+          Navigator.pop(context);
+      });
     }
   }
 
@@ -48,19 +64,19 @@ class Field extends StatelessWidget {
   void onSubmitField(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) {
-        // TODO Create dialog how statefull
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(name),
+          title: Text(widget.name),
           content: contentForAlert(context),
           actions: [
             FlatButton(
-                onPressed: () { saveValue(context); },
-                child: Text('Save')
+              onPressed: () { saveValue(context); },
+              child: Text('Save'),
             ),
             FlatButton(
-                onPressed: () { cancelEdit(context); },
-                child: Text('Cancel')),
+              onPressed: () { cancelEdit(context); },
+              child: Text('Cancel'),
+            ),
           ],
         );
       },
@@ -70,9 +86,7 @@ class Field extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        onSubmitField(context);
-      },
+      onTap: () { onSubmitField(context); },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: gDefaultMargin, vertical: gDefaultMargin / 2),
         decoration: BoxDecoration(
@@ -92,11 +106,8 @@ class Field extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                name,
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              viewValue(context),
+              Text(widget.name, style: Theme.of(context).textTheme.headline3),
+              Text(widget.value.toString(), style: Theme.of(context).textTheme.bodyText1)
             ],
           ),
         ),

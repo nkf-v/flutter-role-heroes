@@ -39,7 +39,7 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
           UserHero hero = snapshot.data;
 
           screenBuilder.reset();
-          screenBuilder.buildMainFieldsCategory(hero);
+          screenBuilder.buildMainFieldsCategory(hero, widget.controller);
           screenBuilder.buildCharacteristicsCategory(hero);
           screenBuilder.buildCategories(hero);
 

@@ -24,13 +24,24 @@ class BaseController {
     return 'Bearer ${await accessTokenStorage.getValue()}';
   }
 
-  dynamic exceptionHandle(exception) {
+  dynamic handleException(exception) {
     var result;
     switch (exception.runtimeType) {
       case DioError:
         result = getErrorMessage((exception as DioError).response.data);
         break;
       default:
+    }
+    return result;
+  }
+
+  dynamic handleRequest(Function request) {
+    var result;
+    try {
+      result = request();
+    }
+    catch (dioError) {
+      result = handleException(dioError);
     }
     return result;
   }

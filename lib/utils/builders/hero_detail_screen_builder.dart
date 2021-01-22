@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:role_heroes/components/characteristics_builder.dart';
 import 'package:role_heroes/components/field.dart';
+import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/category/category.dart';
 import 'package:role_heroes/models/user_hero/user_hero.dart';
@@ -8,7 +9,7 @@ import 'package:role_heroes/widgets/category_tab.dart';
 
 abstract class IHeroDetailScreenBuilder {
   void reset();
-  void buildMainFieldsCategory(UserHero hero);
+  void buildMainFieldsCategory(UserHero hero, IUserHeroController controller);
   void buildCharacteristicsCategory(UserHero hero);
   void buildCategories(UserHero hero);
   List<CategoryTab> getCategories();
@@ -26,7 +27,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
   }
 
   @override
-  void buildMainFieldsCategory(UserHero hero) {
+  void buildMainFieldsCategory(UserHero hero, IUserHeroController controller) {
     _categories.add(
       CategoryTab(
         category: Category(
@@ -38,8 +39,8 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     _views.add(
       Column(
         children: [
-          Field(name: 'Name', value: hero.name),
-          Field(name: 'Note', value: hero.note),
+          Field(name: 'Name', value: hero.name, setValue: (value) => controller.updateHero(hero.id, {'name': value})),
+          Field(name: 'Note', value: hero.note, setValue: (value) => controller.updateHero(hero.id, {'note': value})),
         ],
       )
     );
