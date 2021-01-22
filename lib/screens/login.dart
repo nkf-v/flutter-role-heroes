@@ -112,22 +112,22 @@ class _LoginScreen extends State<LoginScreen> {
                     ),
                   ),
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _formKey.currentState.save();
-                            if (_formKey.currentState.validate())
-                              login(context);
-                          },
-                          child: Text('Log in'),
-                        ),
-                        RaisedButton(
-                          onPressed: () => Navigator.of(context).pushNamed(RegisterScreen.routeName),
-                          child: Text('Register'),
-                        ),
-                      ]
-                  )
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _formKey.currentState.save();
+                          if (_formKey.currentState.validate())
+                            login(context);
+                        },
+                        child: Text('Log in'),
+                      ),
+                      RaisedButton(
+                        onPressed: () => Navigator.of(context).pushNamed(RegisterScreen.routeName),
+                        child: Text('Register'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             )
