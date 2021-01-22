@@ -13,7 +13,7 @@ class HeroListScreen extends StatelessWidget {
       appBar: DefaultAppBar(title: 'Heroes'),
       body: HeroList(gameId: gameId),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { Navigator.of(context).pushNamed(HeroCreateScreen.routeName, arguments: {'gameId': gameId}); },
+        onPressed: () { Navigator.of(context).pushNamed(HeroCreateScreen.routeName, arguments: <String, dynamic>{'gameId': gameId}); },
         child: Icon(Icons.add),
       ),
     );
