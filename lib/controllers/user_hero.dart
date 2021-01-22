@@ -7,6 +7,7 @@ abstract class IUserHeroController {
   Future<UserHero> userHero(int heroId);
   Future<List<Game>> gamesForCreateUserHero();
   Future<dynamic> createHero(int gameId, String name);
+  Future<dynamic> deleteHero(int heroId);
 }
 
 class UserHeroController extends BaseController implements IUserHeroController {
@@ -33,6 +34,18 @@ class UserHeroController extends BaseController implements IUserHeroController {
         'game_id': gameId,
         'name': name,
       });
+    }
+    catch (dioError) {
+      result = exceptionHandle(dioError);
+    }
+    return result;
+  }
+
+  @override
+  Future<dynamic> deleteHero(int heroId) async {
+    var result;
+    try {
+      result = apiClient.deleteHero(await getBearerToken(), heroId);
     }
     catch (dioError) {
       result = exceptionHandle(dioError);
