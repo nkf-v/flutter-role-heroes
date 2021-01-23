@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
+
 abstract class IValueType {
   convertValue(String value);
   String getNameType();
+  TextInputType getInputType();
 }
 
 abstract class ValueTypeFactory {
@@ -27,6 +30,11 @@ class IntType implements IValueType {
 
   @override
   String getNameType() => IntType.nameType;
+
+  @override
+  TextInputType getInputType() {
+    return TextInputType.number;
+  }
 }
 
 class StringType implements IValueType {
@@ -39,6 +47,11 @@ class StringType implements IValueType {
 
   @override
   String getNameType() => StringType.nameType;
+
+  @override
+  TextInputType getInputType() {
+    return TextInputType.text;
+  }
 }
 
 class BooleanType implements IValueType {
@@ -54,6 +67,11 @@ class BooleanType implements IValueType {
 
   @override
   String getNameType() => BooleanType.nameType;
+
+  @override
+  TextInputType getInputType() {
+    return TextInputType.number;
+  }
 }
 
 class DoubleType implements IValueType {
@@ -66,4 +84,10 @@ class DoubleType implements IValueType {
 
   @override
   String getNameType() => DoubleType.nameType;
+
+
+  @override
+  TextInputType getInputType() {
+    return TextInputType.numberWithOptions(decimal: true);
+  }
 }
