@@ -47,4 +47,7 @@ abstract class ApiClient {
 
   @PUT('heroes/{heroId}')
   Future updateHero(@Header('Authorization') String accessToken, @Path('heroId') int heroId, @Body() Map<String, dynamic> json);
+
+  @PUT('heroes/{heroId}/characteristics/{characteristicId}/value')
+  Future updateHeroCharacteristicValue(@Header('Authorization') String accessToken, @Path('heroId') int heroId, @Path('characteristicId') int characteristicId, @Body() Map<String, dynamic> json);
 }
