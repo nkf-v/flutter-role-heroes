@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/flushbar.dart';
+import 'package:role_heroes/utils/value_types.dart';
 
 import '../constants.dart';
 
 class Field extends StatefulWidget {
   String name;
+  IValueType type;
   dynamic value;
   Future Function(dynamic) setValue;
 
   Field({
     @required this.name,
+    @required this.type,
     @required this.value,
     @required this.setValue,
   });
@@ -25,7 +28,7 @@ class _FieldState extends State<Field> {
     _editValueController.text = widget.value.toString();
     return TextField(
       controller: _editValueController,
-      keyboardType: TextInputType.text,
+      keyboardType: widget.type.getInputType(),
       decoration: InputDecoration(
         hintText: 'Fill field',
         filled: true,
@@ -39,11 +42,16 @@ class _FieldState extends State<Field> {
     String newValue = _editValueController.text;
     if (newValue != widget.value.toString()) {
       MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
-      widget.setValue(newValue)
+      widget.setValue(widget.type.convertValue(newValue))
         .then((value) {
           processFlushbar.dismiss();
-          setState(() { widget.value = newValue; });
+          MainFlushbar(
+              message: 'Success update',
+              statusColor: Colors.red,
+              duration: Duration(seconds: 2)
+          )..show(context);
           Navigator.pop(context);
+          setState(() { widget.value = newValue; });
         })
         .catchError((error) {
           processFlushbar.dismiss();
