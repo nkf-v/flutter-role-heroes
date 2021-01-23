@@ -44,14 +44,7 @@ class UserHeroController extends BaseController implements IUserHeroController {
 
   @override
   Future<dynamic> deleteHero(int heroId) async {
-    var result;
-    try {
-      result = apiClient.deleteHero(await getBearerToken(), heroId);
-    }
-    catch (dioError) {
-      result = handleException(dioError);
-    }
-    return result;
+    return handleRequest(() async => apiClient.deleteHero(await getBearerToken(), heroId));
   }
 
   @override
