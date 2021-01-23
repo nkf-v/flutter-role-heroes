@@ -1,16 +1,18 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:role_heroes/components/characteristics_builder.dart';
 import 'package:role_heroes/components/field.dart';
+import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/category/category.dart';
 import 'package:role_heroes/models/user_hero/user_hero.dart';
+import 'package:role_heroes/utils/value_types.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
 abstract class IHeroDetailScreenBuilder {
   void reset();
   void buildMainFieldsCategory(UserHero hero, IUserHeroController controller);
-  void buildCharacteristicsCategory(UserHero hero);
+  void buildCharacteristicsCategory(UserHero hero, IUserHeroController controller);
   void buildCategories(UserHero hero);
   List<CategoryTab> getCategories();
   List<Widget> getViews();
@@ -39,15 +41,25 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     _views.add(
       Column(
         children: [
-          Field(name: 'Name', value: hero.name, setValue: (value) => controller.updateHero(hero.id, {'name': value})),
-          Field(name: 'Note', value: hero.note, setValue: (value) => controller.updateHero(hero.id, {'note': value})),
+          Field(
+            name: 'Name',
+            type: StringType(),
+            value: hero.name,
+            setValue: (value) => controller.updateHero(hero.id, {'name': value})
+          ),
+          Field(
+            name: 'Note',
+            type: StringType(),
+            value: hero.note,
+            setValue: (value) => controller.updateHero(hero.id, {'note': value})
+          ),
         ],
       )
     );
   }
 
   @override
-  void buildCharacteristicsCategory(UserHero hero) {
+  void buildCharacteristicsCategory(UserHero hero, IUserHeroController controller) {
     _categories.add(
         CategoryTab(
             category: Category(
@@ -57,7 +69,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
         )
     );
     _views.add(
-      CharacteristicsBuilder(characteristics: hero.characteristics),
+      CharacteristicsBuilder(hero: hero, controller: controller),
     );
   }
 
@@ -73,7 +85,12 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
           itemCount: attributes.length,
           itemBuilder: (context, index) {
             Attribute attribute = attributes.elementAt(index);
-            return Field(name: attribute.name, value: attribute.value);
+            return Field(
+              name: attribute.name,
+              type: attribute.type,
+              value: attribute.value,
+              setValue: (value) { return emptyFuture; },
+            );
           }
       )
       );
