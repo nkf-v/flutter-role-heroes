@@ -40,7 +40,7 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
 
           screenBuilder.reset();
           screenBuilder.buildMainFieldsCategory(hero, widget.controller);
-          screenBuilder.buildCharacteristicsCategory(hero);
+          screenBuilder.buildCharacteristicsCategory(hero, widget.controller);
           screenBuilder.buildCategories(hero);
 
           List<CategoryTab> categories = screenBuilder.getCategories();
