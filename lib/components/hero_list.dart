@@ -33,7 +33,7 @@ class _HeroListState extends State<HeroList> {
         MainFlushbar(
             message: 'Delete hero success',
             statusColor: Colors.green,
-            duration: Duration(seconds: 3)
+            duration: Duration(seconds: 1)
         )..show(context);
         setState(() {});
       }).catchError((error) {

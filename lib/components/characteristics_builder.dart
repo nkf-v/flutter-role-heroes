@@ -31,7 +31,7 @@ class CharacteristicsBuilder extends StatelessWidget {
       type: IntType(),
       value: characteristic.value,
       // FIXME convert new value
-      setValue: (value) => controller.updateHeroCharacteristic(hero.id, characteristic.id, <String, int>{'value': (IntType()).convertValue(value.toString())}),
+      setValue: (value) => controller.updateHeroCharacteristic(hero.id, characteristic.id, <String, int>{'value': value}),
     );
   }
 }

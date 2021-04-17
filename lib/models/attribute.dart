@@ -7,7 +7,7 @@ class Attribute {
   String name;
 
   IValueType type;
-  String _value;
+  dynamic _value;
   Category category;
 
   Attribute({
@@ -17,13 +17,18 @@ class Attribute {
     @required dynamic value,
     @required this.category,
   }) {
-    _value = value.toString();
+    _value = value;
   }
 
-  get value => type.convertValue(_value);
+  get value {
+    var result;
+    if (_value != null)
+      result = type.convertValue(_value.toString());
+    return result;
+  }
 
   set value(dynamic value) {
-    _value = value.toString();
+    _value = value;
   }
 
   factory Attribute.fromJson(Map<String, dynamic> json) {

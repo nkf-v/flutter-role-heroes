@@ -8,8 +8,10 @@ abstract class IUserHeroController {
   Future<List<Game>> gamesForCreateUserHero();
   Future<dynamic> createHero(int gameId, String name);
   Future<dynamic> deleteHero(int heroId);
+  // TODO get value and to method convert to map
   Future<dynamic> updateHero(int heroId, Map<String, dynamic> fields);
   Future<dynamic> updateHeroCharacteristic(int heroId, int characteristicId, Map<String, dynamic> values);
+  Future<dynamic> updateHeroAttribute(int heroId, int attributeId, Map<String, dynamic> values);
 }
 
 class UserHeroController extends BaseController implements IUserHeroController {
@@ -56,5 +58,10 @@ class UserHeroController extends BaseController implements IUserHeroController {
   @override
   Future updateHeroCharacteristic(int heroId, int characteristicId, Map<String, dynamic> values) async {
     return handleRequest(() async => apiClient.updateHeroCharacteristicValue(await getBearerToken(), heroId, characteristicId, values));
+  }
+
+  @override
+  Future updateHeroAttribute(int heroId, int attributeId, Map<String, dynamic> values) {
+    return handleRequest(() async => apiClient.updateHeroAttributeValue(await getBearerToken(), heroId, attributeId, values));
   }
 }

@@ -22,13 +22,16 @@ class Field extends StatefulWidget {
 }
 
 class _FieldState extends State<Field> {
-  final _editValueController = TextEditingController();
+  final _editValueController = TextEditingController(text: '');
 
   Widget contentForAlert(context) {
-    _editValueController.text = widget.value.toString();
+    if (widget.value != null)
+      _editValueController.text = widget.value.toString();
     return TextField(
+      onChanged: (newValue) { widget.value = widget.type.convertValue(newValue); },
       controller: _editValueController,
       keyboardType: widget.type.getInputType(),
+      autofocus: true,
       decoration: InputDecoration(
         hintText: 'Fill field',
         filled: true,
@@ -40,17 +43,17 @@ class _FieldState extends State<Field> {
 
   void saveValue(BuildContext context) {
     String newValue = _editValueController.text;
-    if (newValue != widget.value.toString()) {
+    if (newValue == widget.value.toString()) {
       MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
-      widget.setValue(widget.type.convertValue(newValue))
+      widget.setValue(widget.value)
         .then((value) {
           processFlushbar.dismiss();
+          Navigator.pop(context);
           MainFlushbar(
               message: 'Success update',
-              statusColor: Colors.red,
-              duration: Duration(seconds: 2)
+              statusColor: Colors.green,
+              duration: Duration(seconds: 2),
           )..show(context);
-          Navigator.pop(context);
           setState(() { widget.value = newValue; });
         })
         .catchError((error) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/characteristics_builder.dart';
 import 'package:role_heroes/components/field.dart';
-import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/category/category.dart';
@@ -13,7 +12,7 @@ abstract class IHeroDetailScreenBuilder {
   void reset();
   void buildMainFieldsCategory(UserHero hero, IUserHeroController controller);
   void buildCharacteristicsCategory(UserHero hero, IUserHeroController controller);
-  void buildCategories(UserHero hero);
+  void buildCategories(UserHero hero, IUserHeroController controller);
   List<CategoryTab> getCategories();
   List<Widget> getViews();
 }
@@ -45,13 +44,13 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
             name: 'Name',
             type: StringType(),
             value: hero.name,
-            setValue: (value) => controller.updateHero(hero.id, {'name': value})
+            setValue: (value) => controller.updateHero(hero.id, <String, String>{'name': value})
           ),
           Field(
             name: 'Note',
             type: StringType(),
             value: hero.note,
-            setValue: (value) => controller.updateHero(hero.id, {'note': value})
+            setValue: (value) => controller.updateHero(hero.id, <String, String>{'note': value})
           ),
         ],
       )
@@ -74,7 +73,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
   }
 
   @override
-  void buildCategories(UserHero hero) {
+  void buildCategories(UserHero hero, IUserHeroController controller) {
     Map<Category, List<Attribute>> categoriesAttributes = Map.fromIterable(hero.attributes, key: (attribute) => attribute.category, value: (attribute) => []);
     hero.attributes.forEach((Attribute attribute) {
       categoriesAttributes[attribute.category].add(attribute);
@@ -89,7 +88,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
               name: attribute.name,
               type: attribute.type,
               value: attribute.value,
-              setValue: (value) { return emptyFuture; },
+              setValue: (value) { return controller.updateHeroAttribute(hero.id, attribute.id, <String, dynamic>{'value': value}); },
             );
           }
       )

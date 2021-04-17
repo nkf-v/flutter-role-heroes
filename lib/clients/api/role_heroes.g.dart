@@ -238,4 +238,29 @@ class _ApiClient implements ApiClient {
     final value = _result.data;
     return value;
   }
+
+  @override
+  Future<dynamic> updateHeroAttributeValue(
+      accessToken, heroId, attributeId, json) async {
+    ArgumentError.checkNotNull(accessToken, 'accessToken');
+    ArgumentError.checkNotNull(heroId, 'heroId');
+    ArgumentError.checkNotNull(attributeId, 'attributeId');
+    ArgumentError.checkNotNull(json, 'json');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(json ?? <String, dynamic>{});
+    _data.removeWhere((k, v) => v == null);
+    final _result = await _dio.request(
+        'heroes/$heroId/attributes/$attributeId/value',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'PUT',
+            headers: <String, dynamic>{r'Authorization': accessToken},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = _result.data;
+    return value;
+  }
 }

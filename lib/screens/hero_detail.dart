@@ -41,14 +41,14 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
           screenBuilder.reset();
           screenBuilder.buildMainFieldsCategory(hero, widget.controller);
           screenBuilder.buildCharacteristicsCategory(hero, widget.controller);
-          screenBuilder.buildCategories(hero);
+          screenBuilder.buildCategories(hero, widget.controller);
 
           List<CategoryTab> categories = screenBuilder.getCategories();
 
           result = DefaultTabController(
             length: categories.length,
             child: Scaffold(
-              appBar: AppBarHeroDetail(title: hero.name, tabs: categories),
+              appBar: AppBarHeroDetail(title: 'Hero', tabs: categories),
               body: TabBarView(
                 children: screenBuilder.getViews(),
               ),
