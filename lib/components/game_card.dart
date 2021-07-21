@@ -30,28 +30,17 @@ class GameCard extends StatelessWidget {
       key: ValueKey(game.id),
       child: InkWell(
         onTap: () { Navigator.of(context).pushNamed(HeroListScreen.routeName, arguments: {'gameId': game.id}); },
-        child: Padding(
-          padding: const EdgeInsets.only(top: gDefaultPadding, left: gDefaultPadding, right: gDefaultPadding, bottom: gDefaultPadding / 2),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: gDefaultMargin / 2),
-                child: Row(
-                  children: [
-                    Text(game.name),
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  OutlineButton(
-                    onPressed: () { showDescription(context, game.description); },
-                    child: Text('Description'),
-                  ),
-                ],
-              )
-            ],
+        child: Container(
+          alignment: AlignmentDirectional.bottomStart,
+          child: Padding(
+            padding: EdgeInsets.all(gDefaultPadding / 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(game.name),
+                Icon(Icons.arrow_forward_ios_sharp, size: 15.0,),
+              ],
+            ),
           ),
         ),
       ),
