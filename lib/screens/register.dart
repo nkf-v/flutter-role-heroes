@@ -44,6 +44,7 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: 400.0,
         padding: const EdgeInsets.all(gDefaultPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +133,11 @@ class RegisterScreen extends StatelessWidget {
                         },
                         child: Text('Register'),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
+                        // TODO create style
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                        ),
                         onPressed: Navigator.of(context).pop,
                         child: Text('Log in'),
                       ),

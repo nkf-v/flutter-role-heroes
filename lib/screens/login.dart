@@ -54,10 +54,12 @@ class _LoginScreen extends State<LoginScreen> {
 
     return Scaffold(
       body: Container(
+        height: 500.0,
         padding: const EdgeInsets.all(gDefaultPadding),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            FlutterLogo(size: 90.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -122,7 +124,11 @@ class _LoginScreen extends State<LoginScreen> {
                         },
                         child: Text('Log in'),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
+                        // TODO create style
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                        ),
                         onPressed: () => Navigator.of(context).pushNamed(RegisterScreen.routeName),
                         child: Text('Register'),
                       ),
