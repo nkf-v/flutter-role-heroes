@@ -4,7 +4,7 @@ import 'package:role_heroes/models/characteristic/characteristic.dart';
 import 'package:role_heroes/models/user_hero/user_hero.dart';
 import 'package:role_heroes/utils/value_types.dart';
 
-import 'field.dart';
+import '../app/heroes/widgets/field.dart';
 
 class CharacteristicsBuilder extends StatelessWidget {
   final IUserHeroController controller;
