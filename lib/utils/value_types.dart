@@ -15,7 +15,7 @@ abstract class ValueTypeFactory {
     DoubleType.nameType: DoubleType(),
   };
 
-  static getTypeBuName(String nameType) {
+  static getTypeByName(String nameType) {
     return _cacheForFactory[nameType];
   }
 }
