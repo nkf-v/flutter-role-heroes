@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/components/flushbar.dart';
+import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
-import 'package:role_heroes/models/user_hero/user_hero.dart';
+import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
+import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/screens/hero_detail.dart';
 import 'package:role_heroes/utils/enum_helper.dart';
 
@@ -11,7 +12,6 @@ enum ActionByUserHero { Delete }
 
 class HeroList extends StatefulWidget {
   final int gameId;
-  // TODO replace get controller realize
   final IUserHeroController controller = UserHeroController();
 
   HeroList({@required this.gameId});
@@ -25,31 +25,24 @@ class HeroList extends StatefulWidget {
 class _HeroListState extends State<HeroList> {
   ActionByUserHero currentAction;
 
-  onSelectAction(ActionByUserHero action, int heroId) async {
-    MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
+  onSelectAction(BuildContext context, ActionByUserHero action, int heroId) async {
+    ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: CircularProgressIndicator()));
+
     if (action == ActionByUserHero.Delete) {
-      widget.controller.deleteHero(heroId).then((value) {
-        processFlushbar.dismiss();
-        MainFlushbar(
-            message: 'Delete hero success',
-            statusColor: Colors.green,
-            duration: Duration(seconds: 1)
-        )..show(context);
-        setState(() {});
-      }).catchError((error) {
-        processFlushbar.dismiss();
-        MainFlushbar(
-            message: error.toString(),
-            statusColor: Colors.red,
-            duration: Duration(seconds: 3)
-        )..show(context);
-      });
+      widget.controller.delete(heroId)
+          .then((value) {
+            ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Герой удален')));
+            setState(() {});
+          })
+          .catchError((error) {
+            ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(error.toString())));
+          });
     }
   }
 
-  Widget builderHeroMenu(int heroId) {
+  Widget builderHeroMenu(BuildContext context, int heroId) {
     return PopupMenuButton<ActionByUserHero>(
-      onSelected: (action) { onSelectAction(action, heroId); },
+      onSelected: (action) { onSelectAction(context, action, heroId); },
       itemBuilder: (BuildContext context) => ActionByUserHero.values
         .map((action) =>
           PopupMenuItem<ActionByUserHero>(
@@ -62,9 +55,8 @@ class _HeroListState extends State<HeroList> {
 
   @override
   build(BuildContext context) {
-    // TODO: Learn RefreshIndicator
     return FutureBuilder(
-      future: widget.controller.userHeroes(widget.gameId),
+      future: widget.controller.getList(widget.gameId),
       builder: (BuildContext context, AsyncSnapshot<List<UserHero>> snapshot) {
         Widget result = Center(
           child: PreLoader(),
@@ -81,9 +73,9 @@ class _HeroListState extends State<HeroList> {
                   key: ValueKey(userHero.id),
                   onTap: () {
                     Navigator.of(context).pushNamed(
-                        HeroDetailScreen.routeName, arguments: <
-                        String,
-                        dynamic>{'heroId': userHero.id});
+                        HeroDetailScreen.routeName,
+                        arguments: {'heroId': userHero.id},
+                    );
                   },
                   child: Card(
                     child: Padding(
@@ -95,7 +87,7 @@ class _HeroListState extends State<HeroList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(userHero.name),
-                              builderHeroMenu(userHero.id),
+                              builderHeroMenu(context, userHero.id),
                             ],
                           ),
                         ],

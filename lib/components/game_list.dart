@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/components/flushbar.dart';
 import 'package:role_heroes/components/game_card.dart';
 import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/game.dart';
-import 'package:role_heroes/models/game/game.dart';
+import 'package:role_heroes/modules/games/controllers/controller.dart';
+import 'package:role_heroes/modules/games/models/game.dart';
+
+import 'main_snackbar.dart';
 
 class GameList extends StatefulWidget {
   // TODO replace get controller realize
@@ -37,17 +39,13 @@ class _GameListState extends State<GameList> {
               }
             ),
           );
-        }
-        else if (snapshot.hasError) {
+        } else if (snapshot.hasError) {
+          ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Не удалось получить игры')));
+
           result = Container(
             alignment: Alignment.center,
-            child: Text('Empty', style: Theme.of(context).textTheme.bodyText2),
+            child: Text(snapshot.error, style: Theme.of(context).textTheme.bodyText2),
           );
-
-          MainFlushbar(
-            message: snapshot.error.toString(),
-            duration: Duration(seconds: 5),
-          ).show(context);
         }
 
         return result;

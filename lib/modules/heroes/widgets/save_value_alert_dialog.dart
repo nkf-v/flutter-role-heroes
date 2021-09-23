@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/flushbar.dart';
+import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/utils/value_types.dart';
 
 class SaveFieldValueAlertDialog extends StatelessWidget {
@@ -29,11 +30,12 @@ class SaveFieldValueAlertDialog extends StatelessWidget {
           processFlushbar.dismiss();
           Navigator.pop(context);
 
-          MainFlushbar(
-            message: 'Success update',
-            statusColor: Colors.green,
-            duration: Duration(seconds: 2),
-          )..show(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            MainSnackBar(
+              content: Text('Значение обновлено'),
+              duration: Duration(seconds: 2),
+            )
+          );
 
           this.value = newValue;
           this.successSaveValue(this.value);

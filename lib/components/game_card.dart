@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/constants.dart';
-import 'package:role_heroes/models/game/game.dart';
+import 'package:role_heroes/modules/games/models/game.dart';
 import 'package:role_heroes/screens/hero_list.dart';
 
 class GameCard extends StatelessWidget {
@@ -15,7 +15,7 @@ class GameCard extends StatelessWidget {
         return AlertDialog(
           content: Text(description),
           actions: [
-            FlatButton(
+            TextButton(
                 onPressed: () { Navigator.pop(context); },
                 child: Text('Close')),
           ],
@@ -31,15 +31,18 @@ class GameCard extends StatelessWidget {
       child: InkWell(
         onTap: () { Navigator.of(context).pushNamed(HeroListScreen.routeName, arguments: {'gameId': game.id}); },
         child: Container(
+          height: 60,
           alignment: AlignmentDirectional.bottomStart,
-          child: Padding(
-            padding: EdgeInsets.all(gDefaultPadding / 2),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(game.name),
-                Icon(Icons.arrow_forward_ios_sharp, size: 15.0,),
-              ],
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: gDefaultPadding),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(game.name),
+                  Icon(Icons.arrow_forward_ios_sharp, size: 15.0,),
+                ],
+              ),
             ),
           ),
         ),

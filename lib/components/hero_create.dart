@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/components/flushbar.dart';
+import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
-import 'package:role_heroes/models/game/game.dart';
-import 'package:role_heroes/screens/hero_detail.dart';
+import 'package:role_heroes/modules/games/models/game.dart';
+import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
 
 class HeroCreateFormValues {
   int gameId;
@@ -12,8 +12,7 @@ class HeroCreateFormValues {
 }
 
 class HeroCreateForm extends StatefulWidget {
-  // TODO replace get controller realize
-  IUserHeroController controller = UserHeroController();
+  final IUserHeroController controller = UserHeroController();
 
   @override
   _HeroCreateFormState createState() => _HeroCreateFormState();
@@ -24,23 +23,14 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
   final HeroCreateFormValues _formValues = HeroCreateFormValues();
 
   void createHeroSubject(BuildContext context) async {
-    MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
-    var result = await widget.controller.createHero(_formValues.gameId, _formValues.name);
-    processFlushbar.dismiss();
+    var result = await widget.controller.create(_formValues.gameId, _formValues.name);
 
-    if (result is Map) {
-      MainFlushbar(
-        message: 'Create success',
-        statusColor: Colors.green,
-        duration: Duration(seconds: 1),
-      )..show(context).whenComplete(() => Navigator.of(context).pushReplacementNamed(HeroDetailScreen.routeName, arguments: {'heroId': result['id']}));
-    }
-    else {
-      MainFlushbar(
-        message: result,
-        statusColor: Colors.red,
-        duration: Duration(seconds: 2),
-      ).show(context);
+    if (result) {
+      ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Герой успешно создан'), onVisible: () {
+        Navigator.of(context).pop();
+      }));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Не удалось создать героя')));
     }
   }
 
@@ -96,7 +86,7 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
             ),
             Container(
               alignment: Alignment.topLeft,
-              child: RaisedButton(
+              child: TextButton(
                 child: Text('Create'),
                 onPressed: () {
                   _formKey.currentState.save();

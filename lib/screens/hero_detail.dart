@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
-import 'package:role_heroes/models/user_hero/user_hero.dart';
+import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
+import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/utils/builders/hero_detail_screen_builder.dart';
 import 'package:role_heroes/widgets/app_bar_hero_detail.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
 class HeroDetailScreen extends StatefulWidget {
   static String routeName = '/hero';
-  // TODO replace get controller realize
-  IUserHeroController controller = UserHeroController();
+  final IUserHeroController controller = UserHeroController();
 
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +27,7 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
   Widget build(BuildContext context) {
     heroId = (ModalRoute.of(context).settings.arguments as Map<String, dynamic>)['heroId'] as int;
     return FutureBuilder(
-      future: widget.controller.userHero(heroId),
+      future: widget.controller.getDetail(heroId),
       builder: (context, AsyncSnapshot<UserHero> snapshot) {
         Widget result = Scaffold(
           body: Center(
@@ -53,8 +53,7 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
               ),
             ),
           );
-        }
-        else if (snapshot.hasError) {
+        } else if (snapshot.hasError) {
           result = Scaffold(
             body: Center(
               child: Text(snapshot.error.toString()),

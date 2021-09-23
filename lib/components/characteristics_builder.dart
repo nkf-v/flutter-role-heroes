@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/characteristic/characteristic.dart';
-import 'package:role_heroes/models/user_hero/user_hero.dart';
+import 'package:role_heroes/modules/heroes/models/user_hero.dart';
+import 'package:role_heroes/modules/heroes/widgets/field.dart';
 import 'package:role_heroes/utils/value_types.dart';
-
-import '../app/heroes/widgets/field.dart';
 
 class CharacteristicsBuilder extends StatelessWidget {
   final IUserHeroController controller;
@@ -30,8 +29,10 @@ class CharacteristicsBuilder extends StatelessWidget {
       name: characteristic.name,
       type: IntType(),
       value: characteristic.value,
-      // FIXME convert new value
-      setValue: (value) => controller.updateHeroCharacteristic(hero.id, characteristic.id, <String, int>{'value': value}),
+      setValue: (value) {
+        characteristic.value = value;
+        return controller.updateCharacteristic(hero, characteristic);
+      },
     );
   }
 }

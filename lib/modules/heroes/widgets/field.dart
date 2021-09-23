@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/app/heroes/widgets/field_content.dart';
-import 'package:role_heroes/app/heroes/widgets/save_value_alert_dialog.dart';
+import 'package:role_heroes/modules/heroes/widgets/field_content.dart';
+import 'package:role_heroes/modules/heroes/widgets/save_value_alert_dialog.dart';
 import 'package:role_heroes/utils/value_types.dart';
 
 import '../../../constants.dart';

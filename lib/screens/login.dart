@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/components/flushbar.dart';
+import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/auth.dart';
 import 'package:role_heroes/screens/game_list.dart';
@@ -27,30 +27,39 @@ class _LoginScreen extends State<LoginScreen> {
   final LoginFormValues _formValues = LoginFormValues();
 
   void login(BuildContext context) async {
-    MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
+    // TODO придумать норм preloader
+    ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(
+        content: Center(
+          heightFactor: 1,
+          widthFactor: 0,
+          child: CircularProgressIndicator(),
+        ),
+    ));
+
     var result = await widget.controller.login(_formValues.login, _formValues.password);
-    processFlushbar.dismiss();
 
     if (result is bool && result) {
-      MainFlushbar(
-        message: 'Log in success',
-        statusColor: Colors.green,
-        duration: Duration(seconds: 1),
-      )..show(context).whenComplete(() => Navigator.of(context).pushReplacementNamed(GameScreen.routeName));
-    }
-    else {
-      MainFlushbar(
-        message: result,
-        statusColor: Colors.red,
-        duration: Duration(seconds: 2),
-      ).show(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+          MainSnackBar(
+            content: Text('Аунтификация успешна'),
+            onVisible: () {
+              Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
+          },
+        )
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(result.toString())));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO check auth on splash screen
-    widget.controller.checkAuth().then((isAuth) { if (isAuth) Navigator.of(context).pushReplacementNamed(GameScreen.routeName); });
+    widget.controller.checkAuth()
+      .then((isAuth) {
+        if (isAuth)
+          Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
+      });
 
     return Scaffold(
       body: Container(
@@ -79,13 +88,13 @@ class _LoginScreen extends State<LoginScreen> {
                       validator: (String value) {
                         String result;
                         if (value.length < 3)
-                          result = 'Login length is less 3 characters';
+                          result = 'Логин должен содержать больше 3 символов';
                         return result;
                       },
                       onSaved: (String value) => _formValues.login = value,
                       decoration: InputDecoration(
-                        labelText: 'Login',
-                        hintText: 'Enter login',
+                        labelText: 'Логин',
+                        hintText: 'Введите логин',
                         labelStyle: Theme.of(context).textTheme.bodyText2,
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(),
@@ -100,13 +109,13 @@ class _LoginScreen extends State<LoginScreen> {
                       validator: (String value) {
                         String result;
                         if (value.length < 6)
-                          result = 'Password length is less 6 characters';
+                          result = 'Пароль должен содержать больше 6 символов';
                         return result;
                       },
                       onSaved: (String value) => _formValues.password = value,
                       decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter password',
+                        labelText: 'Пароль',
+                        hintText: 'Введите пароль',
                         labelStyle: Theme.of(context).textTheme.bodyText2,
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(),
@@ -122,7 +131,7 @@ class _LoginScreen extends State<LoginScreen> {
                           if (_formKey.currentState.validate())
                             login(context);
                         },
-                        child: Text('Log in'),
+                        child: Text('Войти'),
                       ),
                       ElevatedButton(
                         // TODO create style
@@ -130,13 +139,13 @@ class _LoginScreen extends State<LoginScreen> {
                           primary: Colors.grey,
                         ),
                         onPressed: () => Navigator.of(context).pushNamed(RegisterScreen.routeName),
-                        child: Text('Register'),
+                        child: Text('Зарегистрироваться'),
                       ),
                     ],
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
