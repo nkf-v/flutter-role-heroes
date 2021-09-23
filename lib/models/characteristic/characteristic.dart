@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
-part 'characteristic.g.dart';
-
 @JsonSerializable()
 class Characteristic {
   int id;
@@ -17,6 +15,10 @@ class Characteristic {
       @required this.value
   });
 
-  factory Characteristic.fromJson(Map<String, dynamic> json) => _$CharacteristicFromJson(json);
-  Map<String, dynamic> toJson() => _$CharacteristicToJson(this);
+  factory Characteristic.createFromData(Map data) => Characteristic(
+      id: data['id'],
+      name: data['name'],
+      description: data['description'],
+      value: data['value'],
+  );
 }

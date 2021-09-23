@@ -31,20 +31,11 @@ class Attribute {
     _value = value;
   }
 
-  factory Attribute.fromJson(Map<String, dynamic> json) {
-    return Attribute(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      type: ValueTypeFactory.getTypeBuName(json['type']),
-      value: json['value'] ?? null,
-      category: Category.fromJson(json['category'] as Map<String, dynamic>),
-    );
-  }
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    'id': id,
-    'name': name,
-    'type': type.getNameType(),
-    'value': value,
-    'category': category.toJson(),
-  };
+  factory Attribute.fromData(Map data) => Attribute(
+    id: data['id'] as int,
+    name: data['name'] as String,
+    type: ValueTypeFactory.getTypeByName(data['type']),
+    value: data['value'],
+    category: Category.fromData(data['category']),
+  );
 }

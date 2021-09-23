@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
-part 'category.g.dart';
-
 @JsonSerializable()
 class Category {
   int id;
@@ -13,8 +11,10 @@ class Category {
     @required this.name,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
-  Map<String, dynamic> toJson() => _$CategoryToJson(this);
+  factory Category.fromData(Map data) => Category(
+    id: data['id'],
+    name: data['name'],
+  );
 
   @override
   bool operator ==(Object other) {
