@@ -1,8 +1,4 @@
-import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
-import 'package:role_heroes/clients/api/role_heroes.dart';
 import 'package:role_heroes/utils/base_controller.dart';
-import 'package:role_heroes/utils/secure_storages.dart';
 
 abstract class IAuthController {
   Future<dynamic> login(String login, String password);
@@ -14,14 +10,17 @@ abstract class IAuthController {
 class AuthController extends BaseController implements IAuthController {
   @override
   Future<dynamic> login(String login, String password) async {
-    var result;
-    try {
-      result = _saveAccessToken(await apiClient.login({'login': login, 'password': password}));
+    final Map<String, dynamic> data = await this.apiClient.login({
+      'login': login,
+      'password': password,
+    });
+
+    if (data.containsKey('access_token')) {
+      await this.accessTokenStorage.setValue(data['access_token']);
+      return true;
     }
-    catch (dioError) {
-      result = handleException(dioError);
-    }
-    return result;
+
+    return data;
   }
 
   @override
@@ -31,7 +30,7 @@ class AuthController extends BaseController implements IAuthController {
       result = _saveAccessToken(await apiClient.register({'login': login, 'password': password, 'password_confirmation': passwordConfirmation}));
     }
     catch (dioError) {
-      result = handleException(dioError);
+      result = dioError.toString();
     }
     return result;
   }
@@ -52,19 +51,18 @@ class AuthController extends BaseController implements IAuthController {
 
   @override
   Future<bool> checkAuth() async {
+    bool result = false;
     String accessToken = await accessTokenStorage.getValue();
-    bool result = false;
-    if (accessToken != null && accessToken != '')
-      result = await _refresh(accessToken);
-    return result;
-  }
 
-  Future<bool> _refresh(String accessToken) async {
-    bool result = false;
-    try {
-      result = _saveAccessToken(await apiClient.refresh(accessToken));
+    if (accessToken != null && accessToken != '') {
+      Map response = await apiClient.refresh(accessToken);
+
+      if (response.containsKey('access_token') != null) {
+        await accessTokenStorage.setValue(response['access_token']);
+        result = true;
+      }
     }
-    catch (dioError) {}
+
     return result;
   }
 }
