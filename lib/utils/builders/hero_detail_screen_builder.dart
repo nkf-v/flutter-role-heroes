@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/app/heroes/widgets/field.dart';
-import 'package:role_heroes/components/characteristics_builder.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/category/category.dart';
-import 'package:role_heroes/models/user_hero/user_hero.dart';
+import 'package:role_heroes/models/characteristic/characteristic.dart';
+import 'package:role_heroes/models/structural_attribute/structural_attribute.dart';
+import 'package:role_heroes/modules/heroes/models/user_hero.dart';
+import 'package:role_heroes/modules/heroes/widgets/field.dart';
+import 'package:role_heroes/modules/heroes/widgets/structural_attribute.dart';
 import 'package:role_heroes/utils/value_types.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
@@ -15,11 +17,11 @@ abstract class IHeroDetailScreenBuilder {
 }
 
 class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
-  Map<CategoryTab, Widget> _mapCategoryToViews;
+  Map<CategoryTab, List<Widget>> _mapCategoryToWidgets;
 
   @override
   void reset() {
-    this._mapCategoryToViews = new Map<CategoryTab, Widget>();
+    this._mapCategoryToWidgets = new Map<CategoryTab, List<Widget>>();
   }
 
   @override
@@ -27,54 +29,81 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     this.buildMainFieldsCategory(hero, controller);
     this.buildCharacteristicsCategory(hero, controller);
     this.buildAttributes(hero, controller);
+    this.buildStructuralAttributes(hero, controller);
   }
 
   @override
   Map<CategoryTab, Widget> getResult() {
-    return this._mapCategoryToViews;
+    return this
+      ._mapCategoryToWidgets
+      .map<CategoryTab, Widget>(
+        (CategoryTab category, List<Widget> widgets) => MapEntry(
+          category,
+          ListView.builder(
+            itemCount: widgets.length,
+            itemBuilder: (BuildContext context, int index) => widgets.elementAt(index),
+          ),
+        )
+    );
   }
 
   void buildMainFieldsCategory(UserHero hero, IUserHeroController controller) {
     final CategoryTab category = CategoryTab(
-        category: Category(
-            id: 0,
-            name: 'Base fields'
-        )
+      category: Category(
+        id: -1,
+        name: 'Base fields',
+      ),
     );
 
-    this._mapCategoryToViews[category] = Column(
-      children: [
-        Field(
-          name: 'Name',
-          type: StringType(),
-          value: hero.name,
-          setValue: (value) => controller.updateHero(
-              hero.id,
-              {'name': value},
-            ),
+    this._saveWidgetToCategory(
+      category,
+      Field(
+        name: 'Name',
+        type: StringType(),
+        value: hero.name,
+        setValue: (value) => controller.updateData(
+          hero,
+          {'name': value},
         ),
-        Field(
-          name: 'Note',
-          type: StringType(),
-          value: hero.note,
-          setValue: (value) => controller.updateHero(
-              hero.id,
-              {'note': value},
-            )
-        ),
-      ],
+      ),
+    );
+
+    this._saveWidgetToCategory(
+      category,
+      Field(
+        name: 'Note',
+        type: StringType(),
+        value: hero.note,
+        setValue: (value) => controller.updateData(
+          hero,
+          {'note': value},
+        )
+      ),
     );
   }
 
   void buildCharacteristicsCategory(UserHero hero, IUserHeroController controller) {
     final CategoryTab category = CategoryTab(
       category: Category(
-        id: 0,
+        id: -2,
         name: 'Characteristics',
-      )
+      ),
     );
 
-    this._mapCategoryToViews[category] = CharacteristicsBuilder(hero: hero, controller: controller);
+    for (final Characteristic characteristic in hero.characteristics) {
+      this._saveWidgetToCategory(
+        category,
+        Field(
+          name: characteristic.name,
+          type: IntType(),
+          value: characteristic.value,
+          setValue: (value) {
+            characteristic.value = value;
+            return controller.updateCharacteristic(hero, characteristic);
+          },
+        ),
+      );
+    }
   }
 
   void buildAttributes(UserHero hero, IUserHeroController controller) {
@@ -88,19 +117,62 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     });
     categoriesAttributes.forEach((Category category, List<Attribute> attributes) {
       final CategoryTab categoryTab = CategoryTab(category: category);
-      this._mapCategoryToViews[categoryTab] = ListView.builder(
-        itemCount: attributes.length,
-        itemBuilder: (context, index) {
-          Attribute attribute = attributes.elementAt(index);
-          return Field(
+      for (final Attribute attribute in attributes) {
+        this._saveWidgetToCategory(
+          categoryTab,
+          Field(
             name: attribute.name,
             type: attribute.type,
             value: attribute.value,
-            setValue: (value) { return controller.updateHeroAttribute(hero.id, attribute.id, <String, dynamic>{'value': value}); },
-          );
-        }
-      );
+            setValue: (value) {
+              attribute.value = value;
+              return controller.updateAttribute(hero, attribute);
+            },
+          ),
+        );
+      }
     });
   }
 
+  void buildStructuralAttributes(UserHero hero, IUserHeroController controller) {
+    Map<Category, List<StructuralAttribute>> categoriesAttributes = Map.fromIterable(
+      hero.structuralAttributes,
+      key: (structuralAttribute) => structuralAttribute.category,
+      value: (structuralAttribute) => [],
+    );
+
+    hero.structuralAttributes.forEach((StructuralAttribute structuralAttribute) {
+      categoriesAttributes[structuralAttribute.category].add(
+        structuralAttribute
+      );
+    });
+
+    categoriesAttributes.forEach((Category category, List<StructuralAttribute> attributes) {
+      final CategoryTab categoryTab = CategoryTab(category: category);
+
+      for (final StructuralAttribute attribute in attributes) {
+        this._saveWidgetToCategory(
+          categoryTab,
+          StructuralAttributeWidget(attribute: attribute),
+        );
+      }
+    });
+  }
+
+  void _saveWidgetToCategory(CategoryTab categoryTab, Widget widget) {
+    bool containKey = false;
+    CategoryTab categoryTabKey = categoryTab;
+    for (final CategoryTab key in this._mapCategoryToWidgets.keys) {
+      if (key.category.id == categoryTab.category.id) {
+        containKey = true;
+        categoryTabKey = key;
+      }
+    }
+
+    if (!containKey) {
+      this._mapCategoryToWidgets[categoryTabKey] = [];
+    }
+
+    this._mapCategoryToWidgets[categoryTabKey].add(widget);
+  }
 }

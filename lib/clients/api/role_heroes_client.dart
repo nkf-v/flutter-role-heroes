@@ -39,9 +39,8 @@ class RoleHeroesClient implements Client {
       }
 
       return response.data;
-    }
-    on DioError catch (error) {
-      return error.response.data;
+    } on DioError catch (error) {
+      return error.response.extra;
     }
   }
 
