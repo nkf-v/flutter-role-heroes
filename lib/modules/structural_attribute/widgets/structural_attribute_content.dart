@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:role_heroes/models/structural_attribute/structural_attribute.dart';
-import 'package:role_heroes/models/structural_value.dart';
-import 'package:role_heroes/modules/heroes/widgets/structural_value_detail.dart';
+import 'package:role_heroes/modules/heroes/models/user_hero.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_attribute.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_value.dart';
+import 'package:role_heroes/modules/structural_attribute/widgets/structural_value_detail.dart';
+import 'package:role_heroes/screens/hero_change_values.dart';
 
 class StructuralAttributeContent extends StatefulWidget {
   final StructuralAttribute attribute;
+  final UserHero hero;
 
   const StructuralAttributeContent({
     Key key,
+    @required this.hero,
     @required this.attribute,
   }) : super(key: key);
 
@@ -32,7 +36,7 @@ class _StructuralAttributeContentState extends State<StructuralAttributeContent>
                   value: value,
                 ),
               );
-            }
+            },
           ),
         ],
       ));
@@ -46,14 +50,16 @@ class _StructuralAttributeContentState extends State<StructuralAttributeContent>
     List<Widget> values = [];
     for (final StructuralValue value in widget.attribute.values) {
       values.add(
-          ListTile(
-            title: Text(value.name),
-            onTap: () {
-              showDialog(context: context, builder: (BuildContext context) {
-                return StructuralValueDetail(fields: widget.attribute.fields, value: value);
-              });
-            },
-          )
+        ListTile(
+          title: Text(value.name),
+          onTap: () {
+            showDialog(context: context, builder: (BuildContext context) => StructuralValueDetail(
+                fields: widget.attribute.fields,
+                value: value,
+              )
+            );
+          },
+        )
       );
     }
     return Column(
@@ -62,12 +68,23 @@ class _StructuralAttributeContentState extends State<StructuralAttributeContent>
       children: [
         Container(
           margin: EdgeInsets.only(bottom: 15.0),
-          // padding: EdgeInsets.only(left: 25.0, right: 10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(widget.attribute.name, style: Theme.of(context).textTheme.headline3),
-              FloatingActionButton(onPressed: () {}, child: Icon(Icons.edit), mini: true),
+              FloatingActionButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    HeroChangeStructuralValues.routeName,
+                    arguments: {
+                      'attribute': widget.attribute,
+                      'hero': widget.hero,
+                    },
+                  ).then((value) => setState(() {}));
+                },
+                child: Icon(Icons.edit),
+                mini: true,
+              ),
             ],
           ),
         ),

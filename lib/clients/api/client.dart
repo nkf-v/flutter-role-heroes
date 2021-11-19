@@ -13,4 +13,7 @@ abstract class Client {
 
   Future updateHeroCharacteristicValue(String token, int heroId, int characteristicId, Map<String, dynamic> data);
   Future updateHeroAttributeValue(String token, int heroId, int attributeId, Map<String, dynamic> data);
+
+  Future<List> getStructureAttributeValues(String token, int attributeId);
+  Future setStructuralAttributeValues(String token, int heroId, int attributeId, List<int> valueIds);
 }

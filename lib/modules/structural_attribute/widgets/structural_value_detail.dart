@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/models/structural_field.dart';
-import 'package:role_heroes/models/structural_value.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_field.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_value.dart';
 
 class StructuralValueDetail extends StatelessWidget {
   final List<StructuralField> fields;

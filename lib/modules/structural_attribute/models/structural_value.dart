@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:role_heroes/models/structural_field_value.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_field_value.dart';
 
 class StructuralValue {
   int id;
@@ -28,4 +28,14 @@ class StructuralValue {
       fields: fields,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType == StructuralValue)
+      return id == (other as StructuralValue).id;
+    return super == other;
+  }
+
+  @override
+  int get hashCode => id;
 }

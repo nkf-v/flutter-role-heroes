@@ -114,4 +114,25 @@ class RoleHeroesClient implements Client {
       data: data,
     );
   }
+
+  @override
+  Future<List> getStructureAttributeValues(String token, int attributeId) async {
+    return await this._request(
+      'GET',
+      '/structural_attributes/$attributeId/values',
+      token: token,
+    );
+  }
+
+  @override
+  Future setStructuralAttributeValues(String token, int heroId, int attributeId, List<int> valueIds) async {
+    return await this._request(
+      'PUT',
+      '/heroes/$heroId/structural_attributes/$attributeId/value',
+      token: token,
+      data: {
+        'value_ids': valueIds,
+      },
+    );
+  }
 }

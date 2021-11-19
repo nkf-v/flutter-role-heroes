@@ -1,9 +1,7 @@
 import 'package:meta/meta.dart';
-import 'package:role_heroes/models/structural_value.dart';
-import 'package:role_heroes/utils/value_types.dart';
-
-import '../category/category.dart';
-import '../structural_field.dart';
+import 'package:role_heroes/models/category/category.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_field.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_value.dart';
 
 class StructuralAttribute {
   int id;
@@ -46,5 +44,17 @@ class StructuralAttribute {
       fields: fields,
       values: values,
     );
+  }
+
+  selectedValue(StructuralValue value) {
+    bool selected = this.values.contains(value);
+    if (this.multiply) {
+      if (selected)
+        this.values.remove(value);
+      else
+        this.values.add(value);
+    } else {
+      this.values = selected ? [] : [value];
+    }
   }
 }

@@ -3,10 +3,10 @@ import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/category/category.dart';
 import 'package:role_heroes/models/characteristic/characteristic.dart';
-import 'package:role_heroes/models/structural_attribute/structural_attribute.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_attribute.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/modules/heroes/widgets/field.dart';
-import 'package:role_heroes/modules/heroes/widgets/structural_attribute.dart';
+import 'package:role_heroes/modules/structural_attribute/widgets/structural_attribute.dart';
 import 'package:role_heroes/utils/value_types.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
@@ -153,7 +153,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
       for (final StructuralAttribute attribute in attributes) {
         this._saveWidgetToCategory(
           categoryTab,
-          StructuralAttributeWidget(attribute: attribute),
+          StructuralAttributeWidget(hero: hero, attribute: attribute),
         );
       }
     });

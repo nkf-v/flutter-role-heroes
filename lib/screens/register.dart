@@ -44,7 +44,7 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: 400.0,
+        height: 600.0,
         padding: const EdgeInsets.all(gDefaultPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

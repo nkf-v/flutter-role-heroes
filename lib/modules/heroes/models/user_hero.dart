@@ -1,6 +1,6 @@
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/characteristic/characteristic.dart';
-import 'package:role_heroes/models/structural_attribute/structural_attribute.dart';
+import 'package:role_heroes/modules/structural_attribute/models/structural_attribute.dart';
 
 class UserHero {
   int id;
