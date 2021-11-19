@@ -9,10 +9,8 @@ class MainSnackBar extends SnackBar {
   }) : super(
     key: key,
     content: content,
-    duration: (duration == null) ? Duration(milliseconds: 1500) : duration,
-    padding: EdgeInsets.symmetric(
-      horizontal: 8.0,
-    ),
+    duration: (duration == null) ? Duration(seconds: 15) : duration,
+    padding: EdgeInsets.all(10.0),
     behavior: SnackBarBehavior.floating,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),

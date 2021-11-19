@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/auth.dart';
 import 'package:role_heroes/screens/game_list.dart';
 import 'package:role_heroes/screens/register.dart';
+import 'package:role_heroes/widgets/pre_loader.dart';
 
 class LoginFormValues {
   String login;
@@ -13,7 +15,6 @@ class LoginFormValues {
 class LoginScreen extends StatefulWidget {
   static final routeName = '/';
 
-  // TODO replace get controller realize
   final IAuthController controller = AuthController();
 
   @override
@@ -26,30 +27,32 @@ class _LoginScreen extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final LoginFormValues _formValues = LoginFormValues();
 
-  void login(BuildContext context) async {
-    // TODO придумать норм preloader
-    ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(
-        content: Center(
-          heightFactor: 1,
-          widthFactor: 0,
-          child: CircularProgressIndicator(),
-        ),
-    ));
+  void login(BuildContext context) {
+    PreLoader.show(context);
 
-    var result = await widget.controller.login(_formValues.login, _formValues.password);
+    widget.controller.login(_formValues.login, _formValues.password)
+      .then((result) {
+        PreLoader.hide(context);
 
-    if (result is bool && result) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          MainSnackBar(
-            content: Text('Аунтификация успешна'),
-            onVisible: () {
-              Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
-          },
-        )
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(result.toString())));
-    }
+        if (result is bool && result) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            MainSnackBar(
+              duration: Duration(seconds: 5),
+              content: Text(AppLocalizations.of(context).log_in_success),
+              onVisible: () {
+                Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
+              },
+            )
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            MainSnackBar(
+              duration: Duration(seconds: 5),
+              content: Text(AppLocalizations.of(context).log_in_fail),
+            )
+          );
+        }
+      });
   }
 
   @override
@@ -72,8 +75,21 @@ class _LoginScreen extends State<LoginScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Role', style:  TextStyle(color: gTextColor, fontSize: 28.0, fontWeight: FontWeight.bold)),
-                Text('heroes', style: TextStyle(color: gTextLightColor, fontSize: 28.0)),
+                Text(
+                  AppLocalizations.of(context).logo_first_word,
+                  style: TextStyle(
+                    color: gTextColor,
+                    fontSize: 28.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  AppLocalizations.of(context).logo_second_word,
+                  style: TextStyle(
+                    color: gTextLightColor,
+                    fontSize: 28.0,
+                  ),
+                ),
               ],
             ),
             Form(
@@ -84,41 +100,55 @@ class _LoginScreen extends State<LoginScreen> {
                   Container(
                     margin: const EdgeInsets.only(bottom: gDefaultMargin),
                     child: TextFormField(
+                      textInputAction: TextInputAction.go,
                       keyboardType: TextInputType.text,
                       validator: (String value) {
                         String result;
-                        if (value.length < 3)
-                          result = 'Логин должен содержать больше 3 символов';
+                        if (value.length < 3) {
+                          result = AppLocalizations.of(context).validation_size(
+                            AppLocalizations.of(context).login,
+                            'less',
+                            3,
+                            AppLocalizations.of(context).characters,
+                          );
+                        }
                         return result;
                       },
                       onSaved: (String value) => _formValues.login = value,
                       decoration: InputDecoration(
-                        labelText: 'Логин',
-                        hintText: 'Введите логин',
+                        labelText: AppLocalizations.of(context).login,
+                        hintText: AppLocalizations.of(context).placeholder(
+                          AppLocalizations.of(context).login
+                        ),
                         labelStyle: Theme.of(context).textTheme.bodyText2,
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
                       ),
                     ),
                   ),
                   Container(
                     margin: const EdgeInsets.only(bottom: gDefaultMargin),
                     child: TextFormField(
+                      textInputAction: TextInputAction.done,
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       validator: (String value) {
                         String result;
-                        if (value.length < 6)
-                          result = 'Пароль должен содержать больше 6 символов';
+                        if (value.length < 6) {
+                          result = AppLocalizations.of(context).validation_size(
+                            AppLocalizations.of(context).password,
+                            'less',
+                            6,
+                            AppLocalizations.of(context).characters,
+                          );
+                        }
                         return result;
                       },
                       onSaved: (String value) => _formValues.password = value,
                       decoration: InputDecoration(
-                        labelText: 'Пароль',
-                        hintText: 'Введите пароль',
+                        labelText: AppLocalizations.of(context).password,
+                        hintText: AppLocalizations.of(context).placeholder(
+                          AppLocalizations.of(context).password
+                        ),
                         labelStyle: Theme.of(context).textTheme.bodyText2,
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -129,17 +159,14 @@ class _LoginScreen extends State<LoginScreen> {
                         onPressed: () {
                           _formKey.currentState.save();
                           if (_formKey.currentState.validate())
-                            login(context);
+                            this.login(context);
                         },
-                        child: Text('Войти'),
+                        child: Text(AppLocalizations.of(context).log_in),
                       ),
                       ElevatedButton(
-                        // TODO create style
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
-                        ),
+                        style: ElevatedButton.styleFrom(primary: Colors.grey),
                         onPressed: () => Navigator.of(context).pushNamed(RegisterScreen.routeName),
-                        child: Text('Зарегистрироваться'),
+                        child: Text(AppLocalizations.of(context).register),
                       ),
                     ],
                   ),

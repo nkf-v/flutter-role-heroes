@@ -10,7 +10,7 @@ setup() {
   GetIt.I.registerSingleton<AccessTokenStorage>(AccessTokenStorage());
   GetIt.I.registerFactory<Dio>(() {
     final BaseOptions options = BaseOptions(
-      baseUrl: 'http://dry-bastion-45736.herokuapp.com/api',
+      baseUrl: 'http://test-role-heroes.herokuapp.com/api',
     );
     return Dio(options);
   });

@@ -1,0 +1,41 @@
+{
+  "characters": "символов",
+
+  "placeholder": "Введите {label}",
+  "@placeholder": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+
+  "validation_size": "{label} {condition, select, less{меньше} more{больше}} {count} {type}",
+  "@validation_size": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "condition": {},
+      "count": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+
+  "logo_first_word": "Role",
+  "logo_second_word": "Heroes",
+
+  "log_in": "Войти",
+  "log_in_success": "Вы успешно вошли",
+  "log_in_fail": "Не удалось войти",
+
+  "register": "Зарегистрироваться",
+
+  "login": "Логин",
+
+  "password": "Пароль"
+}
