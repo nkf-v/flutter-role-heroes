@@ -7,6 +7,7 @@ import 'package:role_heroes/screens/hero_detail.dart';
 import 'package:role_heroes/screens/hero_list.dart';
 import 'package:role_heroes/screens/login.dart';
 import 'package:role_heroes/screens/register.dart';
+import 'package:role_heroes/screens/splash.dart';
 import 'package:role_heroes/setup_get_it.dart';
 import 'package:role_heroes/themes/light_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         Locale('ru', ''),
       ],
       routes: {
+        SplashScreen.routeName: (context) => SplashScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
         RegisterScreen.routeName: (context) => RegisterScreen(),
         GameScreen.routeName: (context) => GameScreen(),

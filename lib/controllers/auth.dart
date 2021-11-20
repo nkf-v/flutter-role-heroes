@@ -4,7 +4,7 @@ abstract class IAuthController {
   Future<dynamic> login(String login, String password);
   Future<dynamic> register(String login, String password, String passwordConfirmation);
   Future<void> logout();
-  Future<dynamic> checkAuth();
+  Future<bool> checkAuth();
 }
 
 class AuthController extends BaseController implements IAuthController {

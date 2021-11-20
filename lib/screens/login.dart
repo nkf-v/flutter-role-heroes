@@ -13,7 +13,7 @@ class LoginFormValues {
 }
 
 class LoginScreen extends StatefulWidget {
-  static final routeName = '/';
+  static final routeName = '/login';
 
   final IAuthController controller = AuthController();
 
@@ -57,13 +57,6 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO check auth on splash screen
-    widget.controller.checkAuth()
-      .then((isAuth) {
-        if (isAuth)
-          Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
-      });
-
     return Scaffold(
       body: Container(
         height: 500.0,
