@@ -1,5 +1,5 @@
 name: role_heroes
-description: Applicatoin for store onformation about heroes
+description: Store and edit information about heroes for tabletop role-playing games
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -40,6 +40,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  image_path: "assets/images/logo.png"
+  android: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -54,7 +59,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/images/logo.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

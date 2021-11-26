@@ -28,9 +28,9 @@ class _SplashScreen extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         child: Center(
-          // TODO change logo
-          child: FlutterLogo(
-            size: 200.0,
+          child: Image(
+            width: 100.0,
+            image: AssetImage('assets/images/logo.png'),
           ),
         ),
       ),
