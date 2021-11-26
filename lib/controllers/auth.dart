@@ -27,10 +27,14 @@ class AuthController extends BaseController implements IAuthController {
   Future<dynamic> register(String login, String password, String passwordConfirmation) async {
     var result;
     try {
-      result = _saveAccessToken(await apiClient.register({'login': login, 'password': password, 'password_confirmation': passwordConfirmation}));
-    }
-    catch (dioError) {
-      result = dioError.toString();
+      result = await apiClient.register({
+        'login': login,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+      });
+      await this.accessTokenStorage.setValue(result['access_token']);
+    } catch (error) {
+      result = error.toString();
     }
     return result;
   }

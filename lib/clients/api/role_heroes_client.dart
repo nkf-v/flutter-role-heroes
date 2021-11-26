@@ -34,10 +34,6 @@ class RoleHeroesClient implements Client {
         options: options,
       );
 
-      if (response.statusCode != 200) {
-        throw new Exception(response.data);
-      }
-
       return response.data;
     } on DioError catch (error) {
       return error.response.extra;
@@ -67,7 +63,7 @@ class RoleHeroesClient implements Client {
 
   @override
   Future register(Map data) async {
-    return await this._request('POST', '/register', data: data);
+    return await this._request('POST', '/auth/register', data: data);
   }
 
   @override

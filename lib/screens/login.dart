@@ -64,7 +64,13 @@ class _LoginScreen extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            FlutterLogo(size: 90.0),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Image(
+                width: 100.0,
+                image: AssetImage('assets/images/logo.png'),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -100,7 +106,7 @@ class _LoginScreen extends State<LoginScreen> {
                         if (value.length < 3) {
                           result = AppLocalizations.of(context).validation_size(
                             AppLocalizations.of(context).login,
-                            'less',
+                            AppLocalizations.of(context).size('more'),
                             3,
                             AppLocalizations.of(context).characters,
                           );
@@ -128,7 +134,7 @@ class _LoginScreen extends State<LoginScreen> {
                         if (value.length < 6) {
                           result = AppLocalizations.of(context).validation_size(
                             AppLocalizations.of(context).password,
-                            'less',
+                            AppLocalizations.of(context).size('more'),
                             6,
                             AppLocalizations.of(context).characters,
                           );

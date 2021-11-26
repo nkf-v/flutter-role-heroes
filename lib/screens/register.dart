@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/components/flushbar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/auth.dart';
-
-import 'game_list.dart';
+import 'package:role_heroes/screens/game_list.dart';
+import 'package:role_heroes/widgets/pre_loader.dart';
 
 class RegisterFormValues {
   String login;
@@ -14,30 +15,43 @@ class RegisterFormValues {
 class RegisterScreen extends StatelessWidget {
   static final routeName = '/register';
 
+  final double heightContainerInput = 80.0;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegisterFormValues _formValues = RegisterFormValues();
   // TODO replace get controller realize
   final IAuthController controller = AuthController();
 
   void register(BuildContext context) async {
-    MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
-    var result = await controller.register(_formValues.login, _formValues.password, _formValues.passwordConfirmation);
-    processFlushbar.dismiss();
+    PreLoader.show(context);
 
-    if (result is bool && result) {
-      MainFlushbar(
-        message: 'Register success',
-        statusColor: Colors.green,
-        duration: Duration(seconds: 1),
-      )..show(context).whenComplete(() => Navigator.of(context).pushReplacementNamed(GameScreen.routeName));
-    }
-    else {
-      MainFlushbar(
-        message: result,
-        statusColor: Colors.red,
-        duration: Duration(seconds: 2),
-      ).show(context);
-    }
+    controller.register(
+        _formValues.login,
+        _formValues.password,
+        _formValues.passwordConfirmation,
+    ).then((result) {
+      PreLoader.hide(context);
+      MainSnackBar snackBar;
+
+      if (result) {
+        snackBar = MainSnackBar(
+          content: Text('Register success'),
+          duration: Duration(seconds: 1),
+          onVisible: () {
+            Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
+          },
+        );
+      } else {
+        snackBar = MainSnackBar(content: Text('Не удалось зарегестрироваться'));
+      }
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }).catchError((error) {
+      print(error);
+      PreLoader.hide(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        MainSnackBar(content: Text('Не удалось зарегестрироваться'))
+      );
+    });
   }
 
   @override
@@ -48,77 +62,107 @@ class RegisterScreen extends StatelessWidget {
         padding: const EdgeInsets.all(gDefaultPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               margin: const EdgeInsets.only(bottom: gDefaultPadding),
-              child: Text('Register new user', style: Theme.of(context).textTheme.headline2,),
+              child: Text(
+                AppLocalizations.of(context).register_form,
+                style: Theme.of(context).textTheme.headline2,
+              ),
             ),
             Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(bottom: gDefaultMargin),
+                    height: heightContainerInput,
                     child: TextFormField(
                       keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
                       validator: (String value) {
                         String result;
-                        if (value.length < 3)
-                          result = 'Login not be less 3 characters';
+                        if (value.length < 3) {
+                          result = AppLocalizations.of(context).validation_size(
+                            AppLocalizations.of(context).login,
+                            AppLocalizations.of(context).size('more'),
+                            3,
+                            AppLocalizations.of(context).characters,
+                          );
+                        }
                         return result;
                       },
                       onSaved: (value) => _formValues.login = value,
                       decoration: InputDecoration(
-                        labelText: 'Login',
-                        hintText: 'Enter login',
+                        labelText: AppLocalizations.of(context).login,
+                        hintText: AppLocalizations.of(context).placeholder(
+                          AppLocalizations.of(context).login
+                        ),
                         labelStyle: Theme.of(context).textTheme.bodyText2,
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
                       ),
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: gDefaultMargin),
+                    height: heightContainerInput,
                     child: TextFormField(
                       obscureText: true,
+                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.visiblePassword,
                       validator: (String value) {
                         String result;
-                        if (value.length < 6)
-                          result = 'Password not be less 6 characters';
+                        if (value.length < 6) {
+                          result = AppLocalizations.of(context).validation_size(
+                            AppLocalizations.of(context).password,
+                            AppLocalizations.of(context).size('more'),
+                            6,
+                            AppLocalizations.of(context).characters,
+                          );
+                        }
                         return result;
                       },
                       onSaved: (value) => _formValues.password = value,
                       decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter password',
+                        labelText: AppLocalizations.of(context).password,
+                        hintText: AppLocalizations.of(context).placeholder(
+                          AppLocalizations.of(context).password
+                        ),
                         labelStyle: Theme.of(context).textTheme.bodyText2,
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
                       ),
                     ),
                   ),
                   Container(
+                    height: heightContainerInput,
                     margin: const EdgeInsets.only(bottom: gDefaultMargin),
                     child: TextFormField(
                       obscureText: true,
+                      textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.visiblePassword,
                       validator: (String value) {
                         String result;
-                        if (value.length < 6)
-                          result = 'Password not be less 6 characters';
-                        if (value != _formValues.password)
-                          result = 'Password confirmation not equals with password';
+                        if (value.length < 6) {
+                          result = AppLocalizations.of(context).validation_size(
+                            AppLocalizations.of(context).password_confirmation,
+                            AppLocalizations.of(context).size('more'),
+                            6,
+                            AppLocalizations.of(context).characters,
+                          );
+                        }
+                        if (value != _formValues.password) {
+                          result = AppLocalizations.of(context).validation_equals(
+                            AppLocalizations.of(context).password_confirmation,
+                            AppLocalizations.of(context).password,
+                          );
+                        }
                         return result;
                       },
                       onSaved: (value) => _formValues.passwordConfirmation = value,
                       decoration: InputDecoration(
-                        labelText: 'Password confirmation',
-                        hintText: 'Enter password confirmation',
+                        labelText: AppLocalizations.of(context).password_confirmation,
+                        hintText: AppLocalizations.of(context).placeholder(
+                          AppLocalizations.of(context).password_confirmation
+                        ),
                         labelStyle: Theme.of(context).textTheme.bodyText2,
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -131,7 +175,7 @@ class RegisterScreen extends StatelessWidget {
                           if (_formKey.currentState.validate())
                             register(context);
                         },
-                        child: Text('Register'),
+                        child: Text(AppLocalizations.of(context).to_register),
                       ),
                       ElevatedButton(
                         // TODO create style
@@ -139,13 +183,13 @@ class RegisterScreen extends StatelessWidget {
                           primary: Colors.grey,
                         ),
                         onPressed: Navigator.of(context).pop,
-                        child: Text('Log in'),
+                        child: Text(AppLocalizations.of(context).log_in),
                       ),
-                    ]
-                  )
+                    ],
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

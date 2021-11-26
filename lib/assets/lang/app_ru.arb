@@ -10,17 +10,39 @@
     }
   },
 
-  "validation_size": "{label} {condition, select, less{меньше} more{больше}} {count} {type}",
+  "size": "{condition, select, less{меньше} more{больше}}",
+  "@size": {
+    "placeholders": {
+      "condition": {}
+    }
+  },
+
+  "validation_size": "{label} должен быть {condition} {count} {type}",
   "@validation_size": {
+    "description": "Сообщения для валидирования значения по размеру",
     "placeholders": {
       "label": {
         "type": "String"
       },
-      "condition": {},
+      "condition": {
+        "type": "String"
+      },
       "count": {
         "type": "int"
       },
       "type": {
+        "type": "String"
+      }
+    }
+  },
+  "validation_equals": "{label_one} не совпадает с {label_second}",
+  "@validation_equals": {
+    "description": "Сообщение валидирования для совпадения значений",
+    "placeholders": {
+      "label_one": {
+        "type": "String"
+      },
+      "label_second": {
         "type": "String"
       }
     }
@@ -33,9 +55,12 @@
   "log_in_success": "Вы успешно вошли",
   "log_in_fail": "Не удалось войти",
 
-  "register": "Зарегистрироваться",
+  "register": "Регистрация",
+  "register_form": "Форма регистрации",
+  "to_register": "Зарегестрировать",
 
   "login": "Логин",
 
-  "password": "Пароль"
+  "password": "Пароль",
+  "password_confirmation": "Подтверждение пароля"
 }
