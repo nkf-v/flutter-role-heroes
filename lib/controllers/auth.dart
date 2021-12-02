@@ -24,33 +24,24 @@ class AuthController extends BaseController implements IAuthController {
   }
 
   @override
-  Future<dynamic> register(String login, String password, String passwordConfirmation) async {
-    var result;
-    try {
-      result = await apiClient.register({
-        'login': login,
-        'password': password,
-        'password_confirmation': passwordConfirmation,
-      });
-      await this.accessTokenStorage.setValue(result['access_token']);
-    } catch (error) {
-      result = error.toString();
-    }
-    return result;
+  Future<dynamic> register(
+      String login,
+      String password,
+      String passwordConfirmation
+    ) async {
+    Map result = await apiClient.register({
+      'login': login,
+      'password': password,
+      'password_confirmation': passwordConfirmation,
+    });
+
+    await this.accessTokenStorage.setValue(result['access_token']);
+    return true;
   }
 
   @override
   Future<void> logout() {
     // TODO: realize logout
-  }
-
-  bool _saveAccessToken(response) {
-    bool isSave = false;
-    if (response['access_token'] != null) {
-      accessTokenStorage.setValue(response['access_token']);
-      isSave = true;
-    }
-    return isSave;
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 import 'package:role_heroes/clients/api/client.dart';
+import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/utils/secure_storages.dart';
 
 class RoleHeroesClient implements Client {
@@ -36,7 +37,7 @@ class RoleHeroesClient implements Client {
 
       return response.data;
     } on DioError catch (error) {
-      return error.response.extra;
+      throw new ServerError(data: error.response.data);
     }
   }
 

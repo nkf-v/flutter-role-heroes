@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/auth.dart';
 import 'package:role_heroes/screens/game_list.dart';
+import 'package:role_heroes/utils/builders/error_notification_builder.dart';
 import 'package:role_heroes/widgets/pre_loader.dart';
 
 class RegisterFormValues {
@@ -21,6 +23,7 @@ class RegisterScreen extends StatelessWidget {
   final RegisterFormValues _formValues = RegisterFormValues();
   // TODO replace get controller realize
   final IAuthController controller = AuthController();
+  final IErrorNotificationBuilder errorNotificationBuilder = ErrorNotificationBuilder();
 
   void register(BuildContext context) async {
     PreLoader.show(context);
@@ -35,22 +38,32 @@ class RegisterScreen extends StatelessWidget {
 
       if (result) {
         snackBar = MainSnackBar(
-          content: Text('Register success'),
+          content: Text(AppLocalizations.of(context).register_success),
           duration: Duration(seconds: 1),
           onVisible: () {
             Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
           },
         );
       } else {
-        snackBar = MainSnackBar(content: Text('Не удалось зарегестрироваться'));
+        snackBar = MainSnackBar(content: Text(AppLocalizations.of(context).register_fail));
       }
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }).catchError((error) {
-      print(error);
       PreLoader.hide(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        MainSnackBar(content: Text('Не удалось зарегестрироваться'))
-      );
+
+      if (error.runtimeType == ServerError) {
+        errorNotificationBuilder.rest();
+        errorNotificationBuilder.build(error);
+        ScaffoldMessenger.of(context).showSnackBar(
+          errorNotificationBuilder.getResult()
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          MainSnackBar(
+            content: Text(AppLocalizations.of(context).register_fail),
+          )
+        );
+      }
     });
   }
 
