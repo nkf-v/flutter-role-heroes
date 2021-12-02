@@ -30,6 +30,9 @@ class GameCard extends StatelessWidget {
       key: ValueKey(game.id),
       child: InkWell(
         onTap: () { Navigator.of(context).pushNamed(HeroListScreen.routeName, arguments: {'gameId': game.id}); },
+        onLongPress: () {
+          showDescription(context, game.description);
+        },
         child: Container(
           height: 60,
           alignment: AlignmentDirectional.bottomStart,
