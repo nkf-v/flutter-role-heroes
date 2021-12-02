@@ -4,7 +4,6 @@ import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/utils/builders/hero_detail_screen_builder.dart';
-import 'package:role_heroes/widgets/app_bar_hero_detail.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
 class HeroDetailScreen extends StatefulWidget {
@@ -47,7 +46,10 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
           result = DefaultTabController(
             length: categories.length,
             child: Scaffold(
-              appBar: AppBarHeroDetail(title: 'Hero', tabs: categories),
+              appBar: AppBar(
+                title: Text('Hero'),
+                bottom: TabBar(tabs: categories, isScrollable: true),
+              ),
               body: TabBarView(
                 children: mapWidgets.values.toList(),
               ),
