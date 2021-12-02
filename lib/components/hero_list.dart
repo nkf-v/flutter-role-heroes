@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/constants.dart';
@@ -62,7 +63,7 @@ class _HeroListState extends State<HeroList> {
           child: PreLoader(),
         );
 
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data.length > 0) {
           return Container(
             padding: EdgeInsets.all(gDefaultPadding / 2),
             child: ListView.builder(
@@ -99,7 +100,11 @@ class _HeroListState extends State<HeroList> {
             ),
           );
         }
-        else if (snapshot.hasError) {
+        else if (snapshot.hasData && snapshot.data.length == 0) {
+          // TODO make default result after loading
+          result = Center(child: Text(AppLocalizations.of(context).empty_list));
+        } else if (snapshot.hasError) {
+          // TODO show error notifications
           return Center(child: Text(snapshot.error.toString()));
         }
 

@@ -64,5 +64,9 @@
   "login": "Логин",
 
   "password": "Пароль",
-  "password_confirmation": "Подтверждение пароля"
+  "password_confirmation": "Подтверждение пароля",
+
+  "heroes": "Персонажи",
+
+  "empty_list": "Список пуст"
 }
