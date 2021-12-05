@@ -8,7 +8,7 @@ class HeroListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int gameId = (ModalRoute.of(context).settings.arguments as Map<String, dynamic>)['gameId'] as int;
+    final int gameId = (ModalRoute.of(context).settings.arguments as Map<String, dynamic>)['gameId'] as int;
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).heroes),

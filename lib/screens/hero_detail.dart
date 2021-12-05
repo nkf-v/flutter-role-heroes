@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/components/preloader.dart';
+import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
@@ -9,18 +9,14 @@ import 'package:role_heroes/widgets/category_tab.dart';
 class HeroDetailScreen extends StatefulWidget {
   static String routeName = '/hero';
   final IUserHeroController controller = UserHeroController();
+  final IHeroDetailScreenBuilder screenBuilder = HeroDetailScreenBuilder();
 
   @override
-  State<StatefulWidget> createState() {
-    return _HeroDetailScreenState(screenBuilder: HeroDetailScreenBuilder());
-  }
+  State<StatefulWidget> createState() => _HeroDetailScreenState();
 }
 
 class _HeroDetailScreenState extends State<HeroDetailScreen> {
   int heroId;
-  IHeroDetailScreenBuilder screenBuilder;
-
-  _HeroDetailScreenState({@required this.screenBuilder});
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +26,16 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
       builder: (context, AsyncSnapshot<UserHero> snapshot) {
         Widget result = Scaffold(
           body: Center(
-            child: PreLoader(),
+            child: PreLoaderWidget(),
           ),
         );
 
         if (snapshot.hasData) {
           UserHero hero = snapshot.data;
 
-          screenBuilder.reset();
-          screenBuilder.build(hero, widget.controller);
-          Map<CategoryTab, Widget> mapWidgets = screenBuilder.getResult();
+          widget.screenBuilder.reset();
+          widget.screenBuilder.build(context, hero, widget.controller);
+          Map<CategoryTab, Widget> mapWidgets = widget.screenBuilder.getResult();
 
           List<CategoryTab> categories = mapWidgets.keys.toList();
 
@@ -47,7 +43,7 @@ class _HeroDetailScreenState extends State<HeroDetailScreen> {
             length: categories.length,
             child: Scaffold(
               appBar: AppBar(
-                title: Text('Hero'),
+                title: Text(hero.name),
                 bottom: TabBar(tabs: categories, isScrollable: true),
               ),
               body: TabBarView(

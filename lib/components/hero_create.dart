@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
-import 'package:role_heroes/components/preloader.dart';
+import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/modules/games/models/game.dart';
@@ -52,7 +52,7 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
                 future: widget.controller.gamesForCreateUserHero(),
                 builder: (BuildContext context, AsyncSnapshot<List<Game>> snapshot) {
                   Widget result = Center(
-                    child: PreLoader(),
+                    child: PreLoaderWidget(),
                   );
                   if (snapshot.hasData) {
                     result = DropdownButton<int>(

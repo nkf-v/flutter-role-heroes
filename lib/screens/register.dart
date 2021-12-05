@@ -34,7 +34,7 @@ class RegisterScreen extends StatelessWidget {
         _formValues.passwordConfirmation,
     ).then((result) {
       PreLoader.hide(context);
-      MainSnackBar snackBar;
+      SnackBar snackBar;
 
       if (result) {
         snackBar = MainSnackBar(

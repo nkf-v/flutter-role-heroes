@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
-import 'package:role_heroes/components/preloader.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/screens/hero_detail.dart';
+import 'package:role_heroes/utils/builders/error_notification_builder.dart';
 import 'package:role_heroes/utils/enum_helper.dart';
+import 'package:role_heroes/widgets/pre_loader.dart';
+import 'package:role_heroes/components/pre_loader_widget.dart';
 
 enum ActionByUserHero { Delete }
 
@@ -24,20 +27,21 @@ class HeroList extends StatefulWidget {
 }
 
 class _HeroListState extends State<HeroList> {
+  final IErrorNotificationBuilder errorNotificationBuilder = ErrorNotificationBuilder();
   ActionByUserHero currentAction;
 
   onSelectAction(BuildContext context, ActionByUserHero action, int heroId) async {
-    ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: CircularProgressIndicator()));
+    PreLoader.show(context);
 
     if (action == ActionByUserHero.Delete) {
       widget.controller.delete(heroId)
-          .then((value) {
-            ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Герой удален')));
-            setState(() {});
-          })
-          .catchError((error) {
-            ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(error.toString())));
-          });
+        .then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Герой удален')));
+          setState(() {});
+        })
+        .catchError((error) {
+          ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(error.toString())));
+        });
     }
   }
 
@@ -60,7 +64,7 @@ class _HeroListState extends State<HeroList> {
       future: widget.controller.getList(widget.gameId),
       builder: (BuildContext context, AsyncSnapshot<List<UserHero>> snapshot) {
         Widget result = Center(
-          child: PreLoader(),
+          child: PreLoaderWidget(),
         );
 
         if (snapshot.hasData && snapshot.data.length > 0) {
@@ -74,8 +78,8 @@ class _HeroListState extends State<HeroList> {
                   key: ValueKey(userHero.id),
                   onTap: () {
                     Navigator.of(context).pushNamed(
-                        HeroDetailScreen.routeName,
-                        arguments: {'heroId': userHero.id},
+                      HeroDetailScreen.routeName,
+                      arguments: {'heroId': userHero.id},
                     );
                   },
                   child: Card(
@@ -100,12 +104,25 @@ class _HeroListState extends State<HeroList> {
             ),
           );
         }
-        else if (snapshot.hasData && snapshot.data.length == 0) {
-          // TODO make default result after loading
+        else if (snapshot.hasData && snapshot.data.length == 0 || snapshot.hasError) {
           result = Center(child: Text(AppLocalizations.of(context).empty_list));
-        } else if (snapshot.hasError) {
-          // TODO show error notifications
-          return Center(child: Text(snapshot.error.toString()));
+
+          // TODO create global exception handler
+          if (snapshot.hasError) {
+            if (snapshot.error.runtimeType == ServerError) {
+              errorNotificationBuilder.rest();
+              errorNotificationBuilder.build(snapshot.error);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  errorNotificationBuilder.getResult()
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                MainSnackBar(
+                  content: Text(AppLocalizations.of(context).log_in_fail),
+                )
+              );
+            }
+          }
         }
 
         return result;

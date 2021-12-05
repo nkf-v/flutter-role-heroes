@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/auth.dart';
 import 'package:role_heroes/screens/game_list.dart';
 import 'package:role_heroes/screens/register.dart';
+import 'package:role_heroes/utils/builders/error_notification_builder.dart';
 import 'package:role_heroes/widgets/pre_loader.dart';
 
 class LoginFormValues {
@@ -26,28 +28,47 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreen extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final LoginFormValues _formValues = LoginFormValues();
+  final IErrorNotificationBuilder errorNotificationBuilder = ErrorNotificationBuilder();
 
   void login(BuildContext context) {
     PreLoader.show(context);
 
-    widget.controller.login(_formValues.login, _formValues.password)
+    widget
+      .controller
+      .login(_formValues.login, _formValues.password)
       .then((result) {
         PreLoader.hide(context);
 
+        SnackBar snackBar;
         if (result is bool && result) {
+          snackBar = MainSnackBar(
+            duration: Duration(seconds: 5),
+            content: Text(AppLocalizations.of(context).log_in_success),
+            onVisible: () {
+              Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
+            },
+          );
+        } else {
+          snackBar = MainSnackBar(
+            duration: Duration(seconds: 10),
+            content: Text(AppLocalizations.of(context).log_in_fail),
+          );
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      })
+      .catchError((error) {
+        PreLoader.hide(context);
+
+        if (error.runtimeType == ServerError) {
+          errorNotificationBuilder.rest();
+          errorNotificationBuilder.build(error);
           ScaffoldMessenger.of(context).showSnackBar(
-            MainSnackBar(
-              duration: Duration(seconds: 5),
-              content: Text(AppLocalizations.of(context).log_in_success),
-              onVisible: () {
-                Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
-              },
-            )
+            errorNotificationBuilder.getResult()
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             MainSnackBar(
-              duration: Duration(seconds: 5),
               content: Text(AppLocalizations.of(context).log_in_fail),
             )
           );

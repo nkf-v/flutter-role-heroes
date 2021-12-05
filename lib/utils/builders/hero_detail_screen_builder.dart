@@ -9,10 +9,11 @@ import 'package:role_heroes/modules/heroes/widgets/field.dart';
 import 'package:role_heroes/modules/structural_attribute/widgets/structural_attribute.dart';
 import 'package:role_heroes/utils/value_types.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 abstract class IHeroDetailScreenBuilder {
   void reset();
-  void build(UserHero hero, IUserHeroController controller);
+  void build(BuildContext context, UserHero hero, IUserHeroController controller);
   Map getResult();
 }
 
@@ -25,11 +26,11 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
   }
 
   @override
-  void build(UserHero hero, IUserHeroController controller) {
-    this.buildMainFieldsCategory(hero, controller);
-    this.buildCharacteristicsCategory(hero, controller);
-    this.buildAttributes(hero, controller);
-    this.buildStructuralAttributes(hero, controller);
+  void build(BuildContext context, UserHero hero, IUserHeroController controller) {
+    this.buildMainFieldsCategory(context, hero, controller);
+    this.buildCharacteristicsCategory(context, hero, controller);
+    this.buildAttributes(context, hero, controller);
+    this.buildStructuralAttributes(context, hero, controller);
   }
 
   @override
@@ -47,18 +48,18 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     );
   }
 
-  void buildMainFieldsCategory(UserHero hero, IUserHeroController controller) {
+  void buildMainFieldsCategory(BuildContext context, UserHero hero, IUserHeroController controller) {
     final CategoryTab category = CategoryTab(
       category: Category(
         id: -1,
-        name: 'Base fields',
+        name: AppLocalizations.of(context).hero_detail_main_fields,
       ),
     );
 
     this._saveWidgetToCategory(
       category,
       Field(
-        name: 'Name',
+        name: AppLocalizations.of(context).hero_detail_main_fields_name,
         type: StringType(),
         value: hero.name,
         setValue: (value) => controller.updateData(
@@ -71,7 +72,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     this._saveWidgetToCategory(
       category,
       Field(
-        name: 'Note',
+        name: AppLocalizations.of(context).hero_detail_main_fields_note,
         type: StringType(),
         value: hero.note,
         setValue: (value) => controller.updateData(
@@ -82,11 +83,11 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     );
   }
 
-  void buildCharacteristicsCategory(UserHero hero, IUserHeroController controller) {
+  void buildCharacteristicsCategory(BuildContext context, UserHero hero, IUserHeroController controller) {
     final CategoryTab category = CategoryTab(
       category: Category(
         id: -2,
-        name: 'Characteristics',
+        name: AppLocalizations.of(context).hero_detail_characteristics,
       ),
     );
 
@@ -106,7 +107,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     }
   }
 
-  void buildAttributes(UserHero hero, IUserHeroController controller) {
+  void buildAttributes(BuildContext context, UserHero hero, IUserHeroController controller) {
     Map<Category, List<Attribute>> categoriesAttributes = Map.fromIterable(
         hero.attributes,
         key: (attribute) => attribute.category,
@@ -134,7 +135,7 @@ class HeroDetailScreenBuilder extends IHeroDetailScreenBuilder {
     });
   }
 
-  void buildStructuralAttributes(UserHero hero, IUserHeroController controller) {
+  void buildStructuralAttributes(BuildContext context, UserHero hero, IUserHeroController controller) {
     Map<Category, List<StructuralAttribute>> categoriesAttributes = Map.fromIterable(
       hero.structuralAttributes,
       key: (structuralAttribute) => structuralAttribute.category,

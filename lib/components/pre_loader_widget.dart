@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PreLoader extends StatelessWidget{
+class PreLoaderWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return SizedBox(

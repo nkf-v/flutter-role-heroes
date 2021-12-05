@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
-import 'package:role_heroes/components/preloader.dart';
+import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/controllers/structural_attribute.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/modules/structural_attribute/controllers/controller.dart';
@@ -98,7 +98,7 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
               builder: (BuildContext context, AsyncSnapshot<List<StructuralValue>> snapshot) {
                 if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
-                    child: PreLoader(),
+                    child: PreLoaderWidget(),
                   );
                 } else if (snapshot.hasError) {
                   return Text('Error');
