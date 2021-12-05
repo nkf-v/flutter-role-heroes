@@ -67,6 +67,12 @@
   "password_confirmation": "Подтверждение пароля",
 
   "heroes": "Персонажи",
+  "hero": "Персонаж",
 
-  "empty_list": "Список пуст"
+  "empty_list": "Список пуст",
+
+  "hero_detail_main_fields": "Основыные поля",
+  "hero_detail_main_fields_name": "Имя",
+  "hero_detail_main_fields_note": "Заметки",
+  "hero_detail_characteristics": "Характеристики"
 }
