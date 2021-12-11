@@ -60,18 +60,21 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Выбор значений'),
+        title: Text('Выберите значения'),
         actions: [
-          IconButton(onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Прелоадер')));
-            widget.controller.setUserHeroStructuralValues(widget.hero, widget.attribute)
-              .then((response) {
-                Navigator.of(context).pop();
-              },
-              onError: (error) {
-                ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(error.toString())));
-              });
-          }, icon: Icon(Icons.done)),
+          IconButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Прелоадер')));
+              widget.controller.setUserHeroStructuralValues(widget.hero, widget.attribute)
+                .then((response) {
+                  Navigator.of(context).pop();
+                },
+                onError: (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(error.toString())));
+                });
+            },
+            icon: Icon(Icons.done),
+          ),
         ],
       ),
       body: Column(
@@ -92,25 +95,29 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
               ),
             ),
           ),
-          Container(
-            child: FutureBuilder(
-              future: widget.controller.getValues(widget.attribute),
-              builder: (BuildContext context, AsyncSnapshot<List<StructuralValue>> snapshot) {
-                if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: PreLoaderWidget(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Error');
-                }
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                child: FutureBuilder(
+                  future: widget.controller.getValues(widget.attribute),
+                  builder: (BuildContext context, AsyncSnapshot<List<StructuralValue>> snapshot) {
+                    if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: PreLoaderWidget(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error');
+                    }
 
-                return DataTable(
-                  columns: [
-                    DataColumn(label: Text('Название')),
-                  ],
-                  rows: _getDataRowsFromValues(snapshot.data),
-                );
-              },
+                    return DataTable(
+                      columns: [
+                        DataColumn(label: Text('Название')),
+                      ],
+                      rows: _getDataRowsFromValues(snapshot.data),
+                    );
+                  },
+                ),
+              ),
             ),
           )
         ],
