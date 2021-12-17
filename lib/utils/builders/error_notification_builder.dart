@@ -9,7 +9,7 @@ abstract class IErrorNotificationBuilder {
 }
 
 class ErrorNotificationBuilder implements IErrorNotificationBuilder {
-  MainSnackBar _snackbar;
+  MainSnackBar _snackBar;
 
   @override
   void build(ServerError error) {
@@ -20,18 +20,18 @@ class ErrorNotificationBuilder implements IErrorNotificationBuilder {
         textErrors.add(errorItem['code']);
       }
     }
-    _snackbar = MainSnackBar(
+    _snackBar = MainSnackBar(
       content: Text(textErrors.join("\n")),
       duration: Duration(seconds: 10),
     );
   }
 
   @override
-  SnackBar getResult() => _snackbar;
+  SnackBar getResult() => _snackBar;
 
   @override
   void rest() {
-    this._snackbar = MainSnackBar(
+    this._snackBar = MainSnackBar(
       content: Text('Ошибка сервиса'),
       duration: Duration(seconds: 10),
     );

@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:role_heroes/utils/builders/error_notification_builder.dart';
 
 class ServerError implements Exception {
   Map _data;
@@ -12,4 +13,12 @@ class ServerError implements Exception {
   Map get data => this._data;
 
   Map get errors => this.data['errors'];
+
+  static SnackBar buildToSnackBar(ServerError error) {
+    // TODO move construct to GetIt
+    IErrorNotificationBuilder errorNotificationBuilder = ErrorNotificationBuilder();
+    errorNotificationBuilder.rest();
+    errorNotificationBuilder.build(error);
+    return errorNotificationBuilder.getResult();
+  }
 }
