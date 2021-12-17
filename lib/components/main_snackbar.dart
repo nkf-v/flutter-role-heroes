@@ -15,6 +15,7 @@ class MainSnackBar extends SnackBar {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
+    // TODO  этим методом есть проблемы. Доразобраться.
     onVisible: onVisible,
   );
 }
