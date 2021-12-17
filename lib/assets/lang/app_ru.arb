@@ -68,11 +68,15 @@
 
   "heroes": "Персонажи",
   "hero": "Персонаж",
+  "hero_create": "Создать персонажа",
+  "hero_create_success": "Персонаж успешно создан",
 
   "empty_list": "Список пуст",
 
   "hero_detail_main_fields": "Основыные поля",
   "hero_detail_main_fields_name": "Имя",
   "hero_detail_main_fields_note": "Заметки",
-  "hero_detail_characteristics": "Характеристики"
+  "hero_detail_characteristics": "Характеристики",
+
+  "service_error": "Ошибка сервиса"
 }
