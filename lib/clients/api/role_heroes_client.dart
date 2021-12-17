@@ -52,9 +52,8 @@ class RoleHeroesClient implements Client {
   }
 
   @override
-  Future logout(String token) {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future logout(String token) async {
+    return await this._request('GET', '/logout', token: token);
   }
 
   @override

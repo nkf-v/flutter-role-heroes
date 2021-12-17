@@ -5,7 +5,7 @@ import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 abstract class IUserHeroesRepository {
   Future<List<UserHero>> getListByGame(int gameId);
   Future<UserHero> getDetail(int heroId);
-  Future<bool> create(Map data);
+  Future create(Map data);
   Future<bool> delete(int heroId);
   Future<bool> update(UserHero hero, Map data);
 }

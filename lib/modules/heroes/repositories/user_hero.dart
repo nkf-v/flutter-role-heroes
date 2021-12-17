@@ -30,9 +30,8 @@ class UserHeroesRepository extends BaseRepository implements IUserHeroesReposito
   }
 
   @override
-  Future<bool> create(Map data) async {
-    final Map response = await this.apiClient.createHero(await accessTokenStorage.getValue(), data);
-    return checkSuccessResponse(response);
+  Future create(Map data) async {
+    return await this.apiClient.createHero(await accessTokenStorage.getValue(), data);
   }
 
   @override

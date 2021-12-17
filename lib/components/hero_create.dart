@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/modules/games/models/game.dart';
 import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
+import 'package:role_heroes/widgets/pre_loader.dart';
 
 class HeroCreateFormValues {
   int gameId;
@@ -23,15 +26,34 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
   final HeroCreateFormValues _formValues = HeroCreateFormValues();
 
   void createHeroSubject(BuildContext context) async {
-    var result = await widget.controller.create(_formValues.gameId, _formValues.name);
+    PreLoader.show(context);
 
-    if (result) {
-      ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Герой успешно создан'), onVisible: () {
+    widget.controller.create(_formValues.gameId, _formValues.name)
+      .then((value) {
+        PreLoader.hide(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(
+            content: Text(
+              AppLocalizations.of(context).hero_create_success,
+            ),
+          )
+        );
+
         Navigator.of(context).pop();
-      }));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Не удалось создать героя')));
-    }
+      })
+      .catchError((error) {
+        PreLoader.hide(context);
+
+        SnackBar snackBar = MainSnackBar(
+          content: Text(AppLocalizations.of(context).service_error),
+        );
+
+        if (error.runtimeType == ServerError) {
+          snackBar = ServerError.buildToSnackBar(error);
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
   }
 
   @override
@@ -76,18 +98,18 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
                 keyboardType: TextInputType.text,
                 onSaved: (String value) { _formValues.name = value; },
                 decoration: InputDecoration(
-                  labelText: 'Name',
-                  hintText: 'Enter name',
+                  labelText: AppLocalizations.of(context).hero_detail_main_fields_name,
+                  hintText: AppLocalizations.of(context).placeholder(
+                    AppLocalizations.of(context).hero_detail_main_fields_name
+                  ),
                   labelStyle: Theme.of(context).textTheme.bodyText2,
-                  border: OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(),
                 ),
               ),
             ),
             Container(
               alignment: Alignment.topLeft,
               child: TextButton(
-                child: Text('Create'),
+                child: Text(AppLocalizations.of(context).hero_create),
                 onPressed: () {
                   _formKey.currentState.save();
                   if (_formKey.currentState.validate())
