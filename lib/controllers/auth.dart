@@ -3,7 +3,7 @@ import 'package:role_heroes/utils/base_controller.dart';
 abstract class IAuthController {
   Future<dynamic> login(String login, String password);
   Future<dynamic> register(String login, String password, String passwordConfirmation);
-  Future<void> logout();
+  Future logout();
   Future<bool> checkAuth();
 }
 
@@ -40,8 +40,8 @@ class AuthController extends BaseController implements IAuthController {
   }
 
   @override
-  Future<void> logout() {
-    // TODO: realize logout
+  Future logout() async {
+    return apiClient.logout(await accessTokenStorage.getValue());
   }
 
   @override
