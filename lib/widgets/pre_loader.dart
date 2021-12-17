@@ -5,11 +5,15 @@ class PreLoader {
 
   static show(BuildContext context) {
     if (!PreLoader._show) {
-      showDialog(context: context, builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      });
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      );
       PreLoader._show = true;
     }
   }
