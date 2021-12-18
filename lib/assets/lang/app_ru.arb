@@ -69,6 +69,7 @@
   "heroes": "Персонажи",
   "hero": "Персонаж",
   "hero_create": "Создать персонажа",
+  "hero_delete": "Персонаж удален",
   "hero_create_success": "Персонаж успешно создан",
 
   "empty_list": "Список пуст",
@@ -78,5 +79,9 @@
   "hero_detail_main_fields_note": "Заметки",
   "hero_detail_characteristics": "Характеристики",
 
-  "service_error": "Ошибка сервиса"
+  "service_error": "Ошибка сервиса",
+
+  "search": "Посик",
+  "name": "Название",
+  "choose_values": "Выберите значения"
 }
