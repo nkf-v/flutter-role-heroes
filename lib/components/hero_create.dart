@@ -25,7 +25,7 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
   final _formKey = GlobalKey<FormState>();
   final HeroCreateFormValues _formValues = HeroCreateFormValues();
 
-  void createHeroSubject(BuildContext context) async {
+  void createHero(BuildContext context) async {
     PreLoader.show(context);
 
     widget.controller.create(_formValues.gameId, _formValues.name)
@@ -113,7 +113,7 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
                 onPressed: () {
                   _formKey.currentState.save();
                   if (_formKey.currentState.validate())
-                    createHeroSubject(context);
+                    createHero(context);
                 },
               ),
             ),
