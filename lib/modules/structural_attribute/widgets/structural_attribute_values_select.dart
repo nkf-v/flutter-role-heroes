@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/controllers/structural_attribute.dart';
@@ -7,6 +9,7 @@ import 'package:role_heroes/modules/structural_attribute/controllers/controller.
 import 'package:role_heroes/modules/structural_attribute/models/structural_attribute.dart';
 import 'package:role_heroes/modules/structural_attribute/models/structural_value.dart';
 import 'package:role_heroes/modules/structural_attribute/widgets/structural_value_detail.dart';
+import 'package:role_heroes/widgets/pre_loader.dart';
 
 class StructuralAttributeValuesSelect extends StatefulWidget {
   final UserHero hero;
@@ -42,7 +45,13 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
           DataCell(
             Text(value.name),
             onTap: () {
-              showDialog(context: context, builder: (BuildContext context) => StructuralValueDetail(fields: widget.attribute.fields, value: value));
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => StructuralValueDetail(
+                  fields: widget.attribute.fields,
+                  value: value,
+                ),
+              );
             },
           ),
         ],
@@ -60,17 +69,30 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Выберите значения'),
+        title: Text(AppLocalizations.of(context).service_error),
         actions: [
           IconButton(
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Прелоадер')));
+              PreLoader.show(context);
+              ScaffoldMessenger.of(context).clearSnackBars();
+
               widget.controller.setUserHeroStructuralValues(widget.hero, widget.attribute)
                 .then((response) {
                   Navigator.of(context).pop();
-                },
-                onError: (error) {
-                  ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(error.toString())));
+                })
+                .catchError((error) {
+                  SnackBar snackBar = MainSnackBar(
+                    content: Text(AppLocalizations.of(context).service_error),
+                  );
+
+                  if (error.runtimeType == ServerError) {
+                    snackBar = ServerError.toSnackBar(error);
+                  }
+
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                })
+                .whenComplete(() {
+                  PreLoader.hide(context);
                 });
             },
             icon: Icon(Icons.done),
@@ -90,7 +112,7 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
                 });
               },
               decoration: InputDecoration(
-                labelText: 'Поиск',
+                labelText: AppLocalizations.of(context).search,
                 prefixIcon: Icon(Icons.search),
               ),
             ),
@@ -111,7 +133,7 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
 
                     return DataTable(
                       columns: [
-                        DataColumn(label: Text('Название')),
+                        DataColumn(label: Text(AppLocalizations.of(context).name)),
                       ],
                       rows: _getDataRowsFromValues(snapshot.data),
                     );
@@ -119,7 +141,7 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
