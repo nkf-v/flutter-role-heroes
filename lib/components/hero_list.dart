@@ -34,20 +34,34 @@ class _HeroListState extends State<HeroList> {
     PreLoader.show(context);
 
     if (action == ActionByUserHero.Delete) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+
       widget.controller.delete(heroId)
         .then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text('Герой удален')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            MainSnackBar(
+              content: Text(
+                AppLocalizations.of(context).hero_delete
+              )
+            )
+          );
+
           setState(() {});
         })
         .catchError((error) {
-          ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(error.toString())));
-        });
+          ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(content: Text(
+            AppLocalizations.of(context).service_error
+          )));
+        })
+        .whenComplete(() => PreLoader.hide(context));
     }
   }
 
   Widget builderHeroMenu(BuildContext context, int heroId) {
     return PopupMenuButton<ActionByUserHero>(
-      onSelected: (action) { onSelectAction(context, action, heroId); },
+      onSelected: (action) {
+        onSelectAction(context, action, heroId);
+      },
       itemBuilder: (BuildContext context) => ActionByUserHero.values
         .map((action) =>
           PopupMenuItem<ActionByUserHero>(
@@ -103,22 +117,18 @@ class _HeroListState extends State<HeroList> {
               },
             ),
           );
-        }
-        else if (snapshot.hasData && snapshot.data.length == 0 || snapshot.hasError) {
+        } else if (snapshot.hasData && snapshot.data.length == 0 || snapshot.hasError) {
           result = Center(child: Text(AppLocalizations.of(context).empty_list));
 
-          // TODO create global exception handler
           if (snapshot.hasError) {
             if (snapshot.error.runtimeType == ServerError) {
-              errorNotificationBuilder.rest();
-              errorNotificationBuilder.build(snapshot.error);
               ScaffoldMessenger.of(context).showSnackBar(
-                  errorNotificationBuilder.getResult()
+                ServerError.toSnackBar(snapshot.error)
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 MainSnackBar(
-                  content: Text(AppLocalizations.of(context).log_in_fail),
+                  content: Text(AppLocalizations.of(context).service_error),
                 )
               );
             }
