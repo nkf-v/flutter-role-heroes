@@ -14,7 +14,7 @@ class ServerError implements Exception {
 
   Map get errors => this.data['errors'];
 
-  static SnackBar buildToSnackBar(ServerError error) {
+  static SnackBar toSnackBar(ServerError error) {
     // TODO move construct to GetIt
     IErrorNotificationBuilder errorNotificationBuilder = ErrorNotificationBuilder();
     errorNotificationBuilder.rest();

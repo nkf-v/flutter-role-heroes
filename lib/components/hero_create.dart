@@ -49,7 +49,7 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
         );
 
         if (error.runtimeType == ServerError) {
-          snackBar = ServerError.buildToSnackBar(error);
+          snackBar = ServerError.toSnackBar(error);
         }
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
