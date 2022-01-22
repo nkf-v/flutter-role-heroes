@@ -1,4 +1,6 @@
-import 'package:role_heroes/utils/base_controller.dart';
+import 'package:meta/meta.dart';
+import 'package:role_heroes/clients/api/client.dart';
+import 'package:role_heroes/utils/secure_storages.dart';
 
 abstract class IAuthController {
   Future<dynamic> login(String login, String password);
@@ -7,7 +9,15 @@ abstract class IAuthController {
   Future<bool> checkAuth();
 }
 
-class AuthController extends BaseController implements IAuthController {
+class AuthController implements IAuthController {
+  final Client apiClient;
+  final AccessTokenStorage accessTokenStorage;
+
+  AuthController({
+    @required this.apiClient,
+    @required this.accessTokenStorage,
+  });
+
   @override
   Future<dynamic> login(String login, String password) async {
     final Map<String, dynamic> data = await this.apiClient.login({

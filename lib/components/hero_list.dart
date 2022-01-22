@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
+import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
-import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/screens/hero_detail.dart';
 import 'package:role_heroes/utils/builders/error_notification_builder.dart';
 import 'package:role_heroes/utils/enum_helper.dart';
 import 'package:role_heroes/widgets/pre_loader.dart';
-import 'package:role_heroes/components/pre_loader_widget.dart';
 
 enum ActionByUserHero { Delete }
 
 class HeroList extends StatefulWidget {
   final int gameId;
-  final IUserHeroController controller = UserHeroController();
+  final IUserHeroController controller;
 
-  HeroList({@required this.gameId});
+  HeroList({
+    @required this.gameId,
+    @required this.controller,
+  });
 
   @override
   State<StatefulWidget> createState() {

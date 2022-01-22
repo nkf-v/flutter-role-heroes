@@ -6,7 +6,6 @@ import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/constants.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/modules/games/models/game.dart';
-import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
 import 'package:role_heroes/widgets/pre_loader.dart';
 
 class HeroCreateFormValues {
@@ -15,7 +14,12 @@ class HeroCreateFormValues {
 }
 
 class HeroCreateForm extends StatefulWidget {
-  final IUserHeroController controller = UserHeroController();
+  final IUserHeroController controller;
+
+  HeroCreateForm({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
 
   @override
   _HeroCreateFormState createState() => _HeroCreateFormState();

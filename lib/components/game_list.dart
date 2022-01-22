@@ -9,8 +9,12 @@ import 'package:role_heroes/modules/games/models/game.dart';
 import 'main_snackbar.dart';
 
 class GameList extends StatefulWidget {
-  // TODO replace get controller realize
-  final IGameController controller = GameController();
+  final IGameController controller;
+
+  GameList({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

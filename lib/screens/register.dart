@@ -21,9 +21,15 @@ class RegisterScreen extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegisterFormValues _formValues = RegisterFormValues();
-  // TODO replace get controller realize
-  final IAuthController controller = AuthController();
+  // TODO заменить на что-то внятное
   final IErrorNotificationBuilder errorNotificationBuilder = ErrorNotificationBuilder();
+
+  final IAuthController controller;
+
+  RegisterScreen({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
 
   void register(BuildContext context) async {
     PreLoader.show(context);

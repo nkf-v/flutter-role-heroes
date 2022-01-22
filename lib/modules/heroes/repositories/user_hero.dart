@@ -1,12 +1,19 @@
-import 'package:get_it/get_it.dart';
+import 'package:meta/meta.dart';
 import 'package:role_heroes/clients/api/client.dart';
-import 'package:role_heroes/clients/api/role_heroes_client.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/modules/heroes/repositories/base.dart';
 import 'package:role_heroes/repository/user_heroes.dart';
 import 'package:role_heroes/utils/secure_storages.dart';
 
 class UserHeroesRepository extends BaseRepository implements IUserHeroesRepository {
+  final Client apiClient;
+  final AccessTokenStorage accessTokenStorage;
+
+  UserHeroesRepository({
+    @required this.apiClient,
+    @required this.accessTokenStorage,
+  });
+
   @override
   Future<List<UserHero>> getListByGame(int gameId) async {
     final List userHeroData = await this.apiClient.userHeroes(await this.accessTokenStorage.getValue(), gameId);

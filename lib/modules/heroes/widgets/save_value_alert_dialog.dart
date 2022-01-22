@@ -14,12 +14,13 @@ class SaveFieldValueAlertDialog extends StatelessWidget {
   final _editValueController = TextEditingController(text: '');
 
   SaveFieldValueAlertDialog({
+    Key key,
     @required this.title,
     @required this.value,
     @required this.type,
     @required this.setValue,
     @required this.successSaveValue,
-  });
+  }) : super(key: key);
 
   void saveValue(BuildContext context) {
     String newValue = _editValueController.text;

@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
-import 'package:role_heroes/modules/heroes/controller/user_hero.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
 import 'package:role_heroes/utils/builders/hero_detail_screen_builder.dart';
 import 'package:role_heroes/widgets/category_tab.dart';
 
 class HeroDetailScreen extends StatefulWidget {
   static String routeName = '/hero';
-  final IUserHeroController controller = UserHeroController();
-  final IHeroDetailScreenBuilder screenBuilder = HeroDetailScreenBuilder();
+  final IUserHeroController controller;
+  final IHeroDetailScreenBuilder screenBuilder;
+
+  HeroDetailScreen({
+    Key key,
+    @required this.controller,
+    @required this.screenBuilder,
+  });
 
   @override
   State<StatefulWidget> createState() => _HeroDetailScreenState();

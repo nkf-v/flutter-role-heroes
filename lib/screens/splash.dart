@@ -6,7 +6,12 @@ import 'package:role_heroes/screens/login.dart';
 class SplashScreen extends StatefulWidget {
   static final routeName = '/';
 
-  final IAuthController controller = AuthController();
+  final IAuthController controller;
+
+  const SplashScreen({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SplashScreen();

@@ -5,7 +5,6 @@ import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/components/pre_loader_widget.dart';
 import 'package:role_heroes/controllers/structural_attribute.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
-import 'package:role_heroes/modules/structural_attribute/controllers/controller.dart';
 import 'package:role_heroes/modules/structural_attribute/models/structural_attribute.dart';
 import 'package:role_heroes/modules/structural_attribute/models/structural_value.dart';
 import 'package:role_heroes/modules/structural_attribute/widgets/structural_value_detail.dart';
@@ -14,12 +13,13 @@ import 'package:role_heroes/widgets/pre_loader.dart';
 class StructuralAttributeValuesSelect extends StatefulWidget {
   final UserHero hero;
   final StructuralAttribute attribute;
-  final IStructuralAttributeController controller = StructuralAttributeController();
+  final IStructuralAttributeController controller;
 
   StructuralAttributeValuesSelect({
     Key key,
     @required this.hero,
     @required this.attribute,
+    @required this.controller,
   }) : super(key: key);
 
   @override

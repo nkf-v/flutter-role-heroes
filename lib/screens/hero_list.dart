@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:role_heroes/components/hero_list.dart';
+import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/screens/hero_create.dart';
 
 class HeroListScreen extends StatefulWidget {
   static String routeName = '/heroes';
+  final IUserHeroController controller;
+
+  HeroListScreen({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _HeroListScreenState();
@@ -18,7 +25,7 @@ class _HeroListScreenState extends State<HeroListScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).heroes),
       ),
-      body: HeroList(gameId: gameId),
+      body: HeroList(gameId: gameId, controller: widget.controller),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed(

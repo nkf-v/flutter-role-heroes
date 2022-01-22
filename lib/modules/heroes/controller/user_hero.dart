@@ -1,18 +1,22 @@
+import 'package:meta/meta.dart';
 import 'package:role_heroes/controllers/user_hero.dart';
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/characteristic/characteristic.dart';
 import 'package:role_heroes/modules/games/models/game.dart';
-import 'package:role_heroes/modules/games/repositories/repository.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
-import 'package:role_heroes/modules/heroes/repositories/user_hero.dart';
-import 'package:role_heroes/modules/heroes/repositories/user_hero_data.dart';
 import 'package:role_heroes/repository/games.dart';
 import 'package:role_heroes/repository/user_heroes.dart';
 
 class UserHeroController implements IUserHeroController {
-  final IGamesRepository gamesRepository = GamesRepository();
-  final IUserHeroesRepository userHeroRepository = UserHeroesRepository();
-  final IUserHeroDataRepository userHeroDataRepository = UserHeroDataRepository();
+  final IGamesRepository gamesRepository;
+  final IUserHeroesRepository userHeroRepository;
+  final IUserHeroDataRepository userHeroDataRepository;
+
+  UserHeroController({
+    @required this.gamesRepository,
+    @required this.userHeroRepository,
+    @required this.userHeroDataRepository,
+  });
 
   @override
   Future<List<UserHero>> getList(int gameId) {

@@ -17,7 +17,12 @@ class LoginFormValues {
 class LoginScreen extends StatefulWidget {
   static final routeName = '/login';
 
-  final IAuthController controller = AuthController();
+  final IAuthController controller;
+
+  const LoginScreen({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

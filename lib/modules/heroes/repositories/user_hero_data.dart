@@ -1,11 +1,21 @@
+import 'package:meta/meta.dart';
+import 'package:role_heroes/clients/api/client.dart';
 import 'package:role_heroes/models/attribute.dart';
 import 'package:role_heroes/models/characteristic/characteristic.dart';
 import 'package:role_heroes/modules/heroes/models/user_hero.dart';
+import 'package:role_heroes/modules/heroes/repositories/base.dart';
 import 'package:role_heroes/repository/user_heroes.dart';
-
-import 'base.dart';
+import 'package:role_heroes/utils/secure_storages.dart';
 
 class UserHeroDataRepository extends BaseRepository implements IUserHeroDataRepository {
+  final Client apiClient;
+  final AccessTokenStorage accessTokenStorage;
+
+  UserHeroDataRepository({
+    @required this.apiClient,
+    @required this.accessTokenStorage,
+  });
+
   @override
   Future updateCharacteristic(UserHero hero, Characteristic characteristic) async {
     final Map response = await this.apiClient.updateHeroCharacteristicValue(

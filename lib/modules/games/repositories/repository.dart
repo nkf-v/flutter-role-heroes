@@ -1,13 +1,18 @@
-import 'package:get_it/get_it.dart';
-import 'package:role_heroes/clients/api/client.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:role_heroes/clients/api/role_heroes_client.dart';
 import 'package:role_heroes/modules/games/models/game.dart';
 import 'package:role_heroes/repository/games.dart';
 import 'package:role_heroes/utils/secure_storages.dart';
 
 class GamesRepository implements IGamesRepository {
-  final RoleHeroesClient apiClient = GetIt.instance<Client>() as RoleHeroesClient;
-  final AccessTokenStorage accessTokenStorage = GetIt.instance<AccessTokenStorage>();
+  final RoleHeroesClient apiClient;
+  final AccessTokenStorage accessTokenStorage;
+
+  GamesRepository({
+    @required this.apiClient,
+    @required this.accessTokenStorage,
+  });
 
   @override
   Future<List<Game>> getList() async {

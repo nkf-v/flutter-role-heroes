@@ -1,6 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
+// TODO збавится от него
 class MainFlushbar extends Flushbar
 {
   MainFlushbar({
