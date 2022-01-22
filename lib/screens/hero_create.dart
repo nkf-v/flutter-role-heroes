@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:role_heroes/components/hero_create.dart';
-import 'package:role_heroes/widgets/app_bar_default.dart';
 
 class HeroCreateScreen extends StatelessWidget {
   static String routeName = '/heroes/create';
@@ -8,7 +8,9 @@ class HeroCreateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Create hero',),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).hero_create),
+      ),
       body: HeroCreateForm(),
     );
   }

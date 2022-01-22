@@ -78,6 +78,7 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
                   );
                   if (snapshot.hasData) {
                     result = DropdownButton<int>(
+                      hint: Text(AppLocalizations.of(context).hero_create_choose_game),
                       items: snapshot.data.map<DropdownMenuItem<int>>((Game game) {
                         return DropdownMenuItem<int>(value: game.id, child: Text(game.name));
                       }).toList(),
@@ -108,7 +109,7 @@ class _HeroCreateFormState extends State<HeroCreateForm> {
             ),
             Container(
               alignment: Alignment.topLeft,
-              child: TextButton(
+              child: ElevatedButton(
                 child: Text(AppLocalizations.of(context).hero_create),
                 onPressed: () {
                   _formKey.currentState.save();

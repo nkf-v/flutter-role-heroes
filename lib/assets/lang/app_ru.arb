@@ -69,6 +69,7 @@
   "heroes": "Персонажи",
   "hero": "Персонаж",
   "hero_create": "Создать персонажа",
+  "hero_create_choose_game": "Выберите игровую систему",
   "hero_delete": "Персонаж удален",
   "hero_create_success": "Персонаж успешно создан",
 
