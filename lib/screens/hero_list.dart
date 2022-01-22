@@ -3,9 +3,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:role_heroes/components/hero_list.dart';
 import 'package:role_heroes/screens/hero_create.dart';
 
-class HeroListScreen extends StatelessWidget {
+class HeroListScreen extends StatefulWidget {
   static String routeName = '/heroes';
 
+  @override
+  State<StatefulWidget> createState() => _HeroListScreenState();
+}
+
+class _HeroListScreenState extends State<HeroListScreen> {
   @override
   Widget build(BuildContext context) {
     final int gameId = (ModalRoute.of(context).settings.arguments as Map<String, dynamic>)['gameId'] as int;
@@ -19,7 +24,7 @@ class HeroListScreen extends StatelessWidget {
           Navigator.of(context).pushNamed(
             HeroCreateScreen.routeName,
             arguments: <String, dynamic>{'gameId': gameId},
-          );
+          ).then((value) => setState(() {}));
         },
         child: Icon(Icons.add),
       ),
