@@ -5,17 +5,18 @@ class MainSnackBar extends SnackBar {
     Key key,
     void Function() onVisible,
     Widget content,
-    duration,
+    Duration duration,
+    SnackBarBehavior behavior
   }) : super(
     key: key,
     content: content,
     duration: (duration == null) ? Duration(seconds: 15) : duration,
     padding: EdgeInsets.all(10.0),
-    behavior: SnackBarBehavior.floating,
+    behavior: behavior == null ? SnackBarBehavior.floating : behavior,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
-    // TODO  этим методом есть проблемы. Доразобраться.
+    // TODO с этим методом есть проблемы. Доразобраться.
     onVisible: onVisible,
   );
 }
