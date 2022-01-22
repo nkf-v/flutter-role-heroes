@@ -39,23 +39,14 @@ class _LoginScreen extends State<LoginScreen> {
       .then((result) {
         PreLoader.hide(context);
 
-        SnackBar snackBar;
         if (result is bool && result) {
-          snackBar = MainSnackBar(
-            duration: Duration(seconds: 5),
-            content: Text(AppLocalizations.of(context).log_in_success),
-            onVisible: () {
-              Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
-            },
-          );
+          Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
         } else {
-          snackBar = MainSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(MainSnackBar(
             duration: Duration(seconds: 10),
             content: Text(AppLocalizations.of(context).log_in_fail),
-          );
+          ));
         }
-
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       })
       .catchError((error) {
         PreLoader.hide(context);
