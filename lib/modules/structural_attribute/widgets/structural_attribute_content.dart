@@ -42,6 +42,14 @@ class _StructuralAttributeContentState extends State<StructuralAttributeContent>
       ));
     }
 
+    if (result.length == 0) {
+      result.add(DataRow(cells: [
+        DataCell(
+          Text('Отсутствуют значения'),
+        ),
+      ]));
+    }
+
     return result;
   }
 

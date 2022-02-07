@@ -60,7 +60,7 @@ class _FieldState extends State<Field> {
           padding: const EdgeInsets.all(gDefaultPadding),
           child: FieldContent(
             name: widget.name,
-            value: widget.value.toString(),
+            value: widget.value == null || widget.value == '' ? '<empty>' : widget.value.toString(),
             isLargeContent: _isLargeValue(),
           ),
         ),
