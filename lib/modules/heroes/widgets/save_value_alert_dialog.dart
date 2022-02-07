@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:role_heroes/components/flushbar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_heroes/clients/api/exceptions/server_error.dart';
 import 'package:role_heroes/components/main_snackbar.dart';
 import 'package:role_heroes/utils/value_types.dart';
+import 'package:role_heroes/widgets/pre_loader.dart';
 
 class SaveFieldValueAlertDialog extends StatelessWidget {
   final String title;
@@ -23,12 +25,13 @@ class SaveFieldValueAlertDialog extends StatelessWidget {
   }) : super(key: key);
 
   void saveValue(BuildContext context) {
-    String newValue = _editValueController.text;
-    if (newValue == this.value.toString()) {
-      MainFlushbar processFlushbar = MainFlushbar(message: 'Process', showProgressIndicator: true)..show(context);
+    String newValue = _editValueController.text == '' ? null : _editValueController.text;
+    String oldValue = this.value == null ? null : this.value.toString();
+
+    if (newValue == oldValue) {
+      PreLoader.show(context);
       this.setValue(this.value)
         .then((value) {
-          processFlushbar.dismiss();
           Navigator.pop(context);
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -42,15 +45,18 @@ class SaveFieldValueAlertDialog extends StatelessWidget {
           this.successSaveValue(this.value);
         })
         .catchError((error) {
-          processFlushbar.dismiss();
+          SnackBar snackBar = MainSnackBar(
+            content: Text(AppLocalizations.of(context).service_error),
+          );
 
-          MainFlushbar(
-              message: error.toString(),
-              statusColor: Colors.red,
-              duration: Duration(seconds: 4)
-          )..show(context);
-          Navigator.pop(context);
-        });
+          if (error.runtimeType == ServerError) {
+            snackBar = ServerError.toSnackBar(error);
+          }
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }).whenComplete(() {
+          PreLoader.hide(context);
+      });
     }
   }
 
@@ -60,7 +66,9 @@ class SaveFieldValueAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _editValueController.text = this.value.toString();
+    if (this.value != null) {
+      _editValueController.text = this.value.toString();
+    }
 
     return AlertDialog(
       title: Text(this.title),
