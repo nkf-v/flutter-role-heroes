@@ -65,6 +65,30 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
     }).toList();
   }
 
+  _saveStructuralAttributes(BuildContext context) {
+    PreLoader.show(context);
+    ScaffoldMessenger.of(context).clearSnackBars();
+
+    widget.controller.setUserHeroStructuralValues(widget.hero, widget.attribute)
+      .then((response) {
+        Navigator.of(context).pop();
+      })
+      .catchError((error) {
+        SnackBar snackBar = MainSnackBar(
+          content: Text(AppLocalizations.of(context).service_error),
+        );
+
+        if (error.runtimeType == ServerError) {
+          snackBar = ServerError.toSnackBar(error);
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      })
+      .whenComplete(() {
+        PreLoader.hide(context);
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,27 +97,7 @@ class _StructuralAttributeValuesSelectState extends State<StructuralAttributeVal
         actions: [
           IconButton(
             onPressed: () {
-              PreLoader.show(context);
-              ScaffoldMessenger.of(context).clearSnackBars();
-
-              widget.controller.setUserHeroStructuralValues(widget.hero, widget.attribute)
-                .then((response) {
-                  Navigator.of(context).pop();
-                })
-                .catchError((error) {
-                  SnackBar snackBar = MainSnackBar(
-                    content: Text(AppLocalizations.of(context).service_error),
-                  );
-
-                  if (error.runtimeType == ServerError) {
-                    snackBar = ServerError.toSnackBar(error);
-                  }
-
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                })
-                .whenComplete(() {
-                  PreLoader.hide(context);
-                });
+              _saveStructuralAttributes(context);
             },
             icon: Icon(Icons.done),
           ),
